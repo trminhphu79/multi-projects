@@ -1,0 +1,32 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@server/shared/configs": ["libs/server/shared/configs/src/index.ts"],
+      "@server/shared/entities": ["libs/server/shared/entities/src/index.ts"],
+      "@server/shared/nats-client": [
+        "libs/server/shared/nats-client/src/index.ts"
+      ],
+
+      "@server/auth/data-access": [
+        "libs/server/auth/data-access/src/index.ts"
+      ],
+      "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
+      "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
