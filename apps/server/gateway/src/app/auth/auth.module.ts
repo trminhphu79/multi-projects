@@ -4,6 +4,7 @@ import { NatsClientModule } from '@server/shared/nats-client';
 
 @Module({
   providers: [],
-  controllers: [AuthController, NatsClientModule]
+  controllers: [AuthController],
+  imports:[NatsClientModule]
 })
 export class AuthModule {}
