@@ -1,11 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-
+import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern/chat';
 @Controller()
 export class AppController {
-
   private chatMessages: { sender: string; message: string }[] = [];
-  @MessagePattern('chat.message')
+
+  @MessagePattern(MESSAGE_PATTERN_CHAT.SEND)
   handleChatMessage(payload: { sender: string; message: string }): {
     sender: string;
     message: string;

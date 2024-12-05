@@ -1,18 +1,18 @@
 import {
-    Column,
-    Model,
-    Table,
-    PrimaryKey,
-    AutoIncrement,
-    DataType,
-  } from 'sequelize-typescript';
+  Column,
+  Model,
+  Table,
+  PrimaryKey,
+  AutoIncrement,
+  DataType,
+} from 'sequelize-typescript';
 
 @Table({ tableName: 'account' })
 export class Account extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
-  id: number;
+  override id: number;
 
   @Column
   username: string;
@@ -24,11 +24,11 @@ export class Account extends Model {
     type: DataType.DATE,
     defaultValue: DataType.NOW,
   })
-  createdAt: Date;
+  override createdAt: Date;
 
   @Column({
     type: DataType.DATE,
     defaultValue: DataType.NOW,
   })
-  updatedAt: Date;
+  override updatedAt: Date;
 }

@@ -12,7 +12,7 @@ import {
     @AutoIncrement
     @PrimaryKey
     @Column
-    id: number;
+    override id: number;
   
     @Column({
       allowNull: false, // Use this instead of @NotNull
@@ -40,11 +40,11 @@ import {
       type: DataType.DATE,
       defaultValue: DataType.NOW,
     })
-    createdAt: Date;
+    override createdAt: Date;
   
     @Column({
       type: DataType.DATE,
       defaultValue: DataType.NOW,
     })
-    updatedAt: Date;
+    override updatedAt: Date;
   }

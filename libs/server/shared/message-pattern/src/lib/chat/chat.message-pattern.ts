@@ -1,0 +1,18 @@
+import { MICRO_SERVICE_NAMES } from '../microservice';
+
+const CHAT_MODULES_NAME = Object.freeze({
+  CHAT: `${MICRO_SERVICE_NAMES.CHAT_SERVICE}/CHAT_MODULE`,
+  CHANNEL: `${MICRO_SERVICE_NAMES.CHAT_SERVICE}/CHANNEL_MODULE`,
+});
+
+export const MESSAGE_PATTERN_CHAT = Object.freeze({
+  SEND: `${CHAT_MODULES_NAME.CHAT}/send`,
+  DELETE: `${CHAT_MODULES_NAME.CHAT}/delete`,
+  PAGING: `${CHAT_MODULES_NAME.CHAT}/paging`,
+});
+
+export const MESSAGE_PATTERN_CHANNEL = Object.freeze({
+  CREATE: `${CHAT_MODULES_NAME.CHANNEL}/create`,
+  JOIN: `${CHAT_MODULES_NAME.CHANNEL}/join`,
+  LEAVE: `${CHAT_MODULES_NAME.CHANNEL}/leave`,
+});

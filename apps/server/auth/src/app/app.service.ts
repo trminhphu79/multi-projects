@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { from, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { Account } from '@server/shared/entities';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateAccountDto } from './dto/create-account.dto';
+import { CreateAccountDto } from '@server/shared/dtos';
 
 @Injectable()
 export class AppService {
@@ -10,10 +10,6 @@ export class AppService {
     @InjectModel(Account)
     private userModel: typeof Account
   ) {}
-
-  getData(): Observable<{ message: string }> {
-    return of({ message: 'Hello API' });
-  }
 
   createOne(payload: CreateAccountDto): Observable<any> {
     return from(

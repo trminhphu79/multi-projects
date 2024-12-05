@@ -1,7 +1,8 @@
 import { Controller, Inject, Get, Logger, Post, Body } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { catchError, tap } from 'rxjs';
-import { CreateDto } from './dto/create.dto';
+import { MESSAGE_PATTERN_AUTH } from '@server/shared/message-pattern';
+import { CreateAccountDto } from '@server/shared/dtos';
 
 @Controller('auth')
 export class AuthController {
@@ -10,29 +11,18 @@ export class AuthController {
     private natsClient: ClientProxy
   ) {}
 
-  @Get()
-  createPayment() {
-    return this.natsClient.send({ cmd: 'CREATE_DTO' }, { name: 'TEST' }).pipe(
-      catchError((error) => {
-        Logger.error('Get Action: Create DTO error!!');
-        return error;
-      }),
-      tap((data) => {
-        Logger.log('Get Action: Create DTO successfully!!', data);
-      })
-    );
-  }
-
   @Post()
-  createUser(@Body() payload: CreateDto) {
-    return this.natsClient.send({ cmd: 'CREATE_ACCOUNT' }, payload).pipe(
-      catchError((error) => {
-        Logger.error('Get Action: CREATE_ACCOUNT error!!');
-        return error;
-      }),
-      tap((data) => {
-        Logger.log('Get Action: CREATE_ACCOUNT successfully!!', data);
-      })
-    );
+  createUser(@Body() payload: CreateAccountDto) {
+    return this.natsClient
+      .send({ cmd: MESSAGE_PATTERN_AUTH.CREATE }, payload)
+      .pipe(
+        catchError((error) => {
+          Logger.error('Get Action: CREATE_ACCOUNT error!!');
+          return error;
+        }),
+        tap((data) => {
+          Logger.log('Get Action: CREATE_ACCOUNT successfully!!', data);
+        })
+      );
   }
 }

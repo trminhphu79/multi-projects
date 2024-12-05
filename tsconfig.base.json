@@ -18,7 +18,17 @@
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
+      "@server/shared/dtos": ["libs/server/shared/dtos/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/shared/guards/src/index.ts"],
+      "@server/shared/message-pattern": [
+        "libs/server/shared/message-pattern/src/index.ts"
+      ],
+      "@server/shared/message-pattern/chat": [
+        "libs/server/shared/message-pattern/src/lib/chat/index.ts"
+      ],
+      "@nest-monorepo/microservice": [
+        "libs/server/shared/microservice/src/index.ts"
+      ],
       "@nest-monorepo/pipes": ["libs/server/shared/pipes/src/index.ts"],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],

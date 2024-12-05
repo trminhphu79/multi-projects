@@ -1,23 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { of, tap } from 'rxjs';
-import { CreateAccountDto } from './dto/create-account.dto';
+import { MESSAGE_PATTERN_AUTH } from '@server/shared/message-pattern';
+import { CreateAccountDto } from '@server/shared/dtos';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @MessagePattern({ cmd: 'CREATE_DTO' })
-  getData() {
-    return this.appService.getData().pipe(
-      tap((response) => {
-        console.log('Auth: CREATE_DTO', response);
-      })
-    );
-  }
-
-  @MessagePattern({ cmd: 'CREATE_ACCOUNT' })
+  @MessagePattern({ cmd: MESSAGE_PATTERN_AUTH.CREATE })
   createAccount(body: CreateAccountDto) {
     return this.appService.createOne(body);
   }
