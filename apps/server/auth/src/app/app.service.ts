@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { from, map, Observable, of, switchMap, throwError } from 'rxjs';
-import { Account } from './entities/account.entity';
+import { Account } from '@server/shared/entities';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateAccountDto } from './dto/create-account.dto';
 

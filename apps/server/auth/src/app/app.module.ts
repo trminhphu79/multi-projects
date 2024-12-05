@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Account } from './entities/account.entity';
+import { Account, Channel } from '@server/shared/entities';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
@@ -13,9 +13,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
       username: 'postgres',
       password: '123123anh',
       database: 'chat-local',
-      models: [Account],
+      models: [Account, Channel],
     }),
-    SequelizeModule.forFeature([Account]), // Register models
+    SequelizeModule.forFeature([Account, Channel]), // Register models
   ],
   controllers: [AppController],
   providers: [AppService],
