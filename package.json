@@ -6,7 +6,6 @@
     "gateway": "nx run gateway:serve:development",
     "chat": "nx run chat:serve:development",
     "auth": "nx run auth:serve:development",
-    "netflix": "nx run netflix:serve:development",
     "build:auth": "nx build auth",
     "build:gateway": "nx build gateway"
   },
