@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { of, tap } from 'rxjs';
+import { CreateAccountDto } from './dto/create-account.dto';
 
 @Controller()
 export class AppController {
@@ -17,10 +18,7 @@ export class AppController {
   }
 
   @MessagePattern({ cmd: 'CREATE_ACCOUNT' })
-  createAccount(body) {
-    return of({
-      message: 'Create account successfully!!',
-      data: body,
-    });
+  createAccount(body: CreateAccountDto) {
+    return this.appService.createOne(body);
   }
 }
