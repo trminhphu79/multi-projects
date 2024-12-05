@@ -1,0 +1,120 @@
+input {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  outline: none;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  overflow: hidden;
+  .message-list {
+    flex: 1;
+    overflow-y: auto;
+    height: 100%;
+    padding: 16px;
+    background-color: #f9f9f9;
+    .message-item {
+      display: flex;
+      margin-bottom: 10px;
+      &.sent {
+        justify-content: flex-end;
+        .message-content {
+          background-color: #dcf8c6;
+        }
+      }
+      &.received {
+        justify-content: flex-start;
+        .message-content {
+          background-color: #fff;
+        }
+      }
+      .message-avatar {
+        margin-right: 10px;
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
+      .message-content {
+        max-width: 60%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        position: relative;
+        word-wrap: break-word;
+        p {
+          margin: 0;
+          font-size: 14px;
+        }
+        .timestamp {
+          display: flex;
+          margin-top: 6px;
+          font-size: 12px;
+          color: #888;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+  .message-input {
+    background-color: #f1f1f1de;
+    border-top: 1px solid #eeeeee;
+    width: 100%;
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+
+    input {
+      width: 97%;
+      font-size: 14px;
+    }
+  }
+}
+
+.chat-blank {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    position: absolute;
+    margin-top: 380px;
+    width: 400px;
+    transition: all 0.3s ease;
+    height: 32px;
+    &:focus {
+      border: 1px solid #005a9e;
+    }
+  }
+}
+
+.message-welcome {
+  width: 100%;
+  height: calc(100% - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-size: 24px;
+  }
+}
+
+.message-input.bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+}
+
+.message-sender-name {
+  margin-right: 8px;
+}

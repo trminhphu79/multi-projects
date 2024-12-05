@@ -13,19 +13,20 @@ import { SocketIoModule, SocketIoConfig, Socket } from 'ngx-socket-io';
 import { CommonModule } from '@angular/common';
 
 type Message = { sender: string; message: string; timestamp: Date };
+
 @Component({
+  selector: 'app-chat',
   standalone: true,
   imports: [RouterModule, ReactiveFormsModule, CommonModule],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  templateUrl: './chat.component.html',
+  styleUrl: './chat.component.css',
 })
-export class AppComponent {
+export class ChatComponent {
   title = 'talk-with-me';
   chatInputControl = new FormControl('');
   userControl = new FormControl(null);
   socket = inject(Socket);
-  
+
   messages: WritableSignal<Array<Message>> = signal([]);
   senderAvatar = signal(
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTynVaVrlGzFHaL33Qx5QVLGdNiT1bB2IgS-g&s'
