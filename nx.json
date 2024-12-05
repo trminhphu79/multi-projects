@@ -38,7 +38,8 @@
       "exclude": [
         "apps/nest-monorepo-e2e/**/*",
         "apps/server/gateway-e2e/**/*",
-        "apps/server/auth-e2e/**/*"
+        "apps/server/auth-e2e/**/*",
+        "apps/server/chat-e2e/**/*"
       ]
     }
   ],
@@ -55,6 +56,9 @@
       "linter": "eslint",
       "style": "scss",
       "unitTestRunner": "none"
+    },
+    "@nx/angular:component": {
+      "style": "css"
     }
   }
 }

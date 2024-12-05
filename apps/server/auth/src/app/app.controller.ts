@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 
 @Controller()
 export class AppController {
@@ -14,5 +14,13 @@ export class AppController {
         console.log('Auth: CREATE_DTO', response);
       })
     );
+  }
+
+  @MessagePattern({ cmd: 'CREATE_ACCOUNT' })
+  createAccount(body) {
+    return of({
+      message: 'Create account successfully!!',
+      data: body,
+    });
   }
 }

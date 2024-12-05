@@ -1,11 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe } from '@angular/common';
+import { Socket } from 'ngx-socket-io';
+import { map } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [RouterModule, JsonPipe],
+  imports: [
+    RouterModule,
+    AsyncPipe,
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -13,12 +17,10 @@ import { JsonPipe } from '@angular/common';
 export class AppComponent {
   title = 'netflix';
 
-  httpClient = inject(HttpClient);
   response = signal(null);
+  // socket: Socket = inject(Socket);
 
-  constructor() {
-    this.httpClient.get('http://localhost:3000/').subscribe((response: any) => {
-      this.response.set(response);
-    });
-  }
+  // getMessage() {
+  //   return this.socket.fromEvent('newMessage').pipe(map((data: any) => data));
+  // }
 }
