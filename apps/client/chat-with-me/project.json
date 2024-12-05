@@ -1,28 +1,28 @@
 {
-  "name": "talk-with-me",
+  "name": "chat-with-me",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/client/talk-with-me/src",
+  "sourceRoot": "apps/client/chat-with-me/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/client/talk-with-me",
-        "index": "apps/client/talk-with-me/src/index.html",
-        "browser": "apps/client/talk-with-me/src/main.ts",
+        "outputPath": "dist/apps/client/chat-with-me",
+        "index": "apps/client/chat-with-me/src/index.html",
+        "browser": "apps/client/chat-with-me/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/client/talk-with-me/tsconfig.app.json",
+        "tsConfig": "apps/client/chat-with-me/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/client/talk-with-me/public"
+            "input": "apps/client/chat-with-me/public"
           }
         ],
-        "styles": ["apps/client/talk-with-me/src/styles.scss"],
+        "styles": ["apps/client/chat-with-me/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -53,10 +53,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "talk-with-me:build:production"
+          "buildTarget": "chat-with-me:build:production"
         },
         "development": {
-          "buildTarget": "talk-with-me:build:development"
+          "buildTarget": "chat-with-me:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -64,7 +64,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "talk-with-me:build"
+        "buildTarget": "chat-with-me:build"
       }
     },
     "lint": {
@@ -73,8 +73,8 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "talk-with-me:build",
-        "staticFilePath": "dist/apps/client/talk-with-me/browser",
+        "buildTarget": "chat-with-me:build",
+        "staticFilePath": "dist/apps/client/chat-with-me/browser",
         "spa": true
       }
     }
