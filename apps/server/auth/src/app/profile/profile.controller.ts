@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { UpdateProfileDto } from '@server/shared/dtos/profile';
-import { MESSAGE_PATTERN_PROFILE } from '@server/shared/message-pattern';
+import { MESSAGE_PATTERN_PROFILE } from '@server/shared/message-pattern/auth';
 import { ProfileService } from './profile.service';
 import { map } from 'rxjs';
 

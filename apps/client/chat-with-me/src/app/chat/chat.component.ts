@@ -41,7 +41,7 @@ export class ChatComponent {
     this.chatInputControl.valueChanges
       .pipe(
         distinctUntilChanged(),
-        debounceTime(300),
+        debounceTime(50),
         filter(() => !!this.userControl.value),
         tap((value) => {
           if (!value) {

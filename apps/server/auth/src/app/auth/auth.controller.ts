@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { MESSAGE_PATTERN_AUTH } from '@server/shared/message-pattern';
+import { MESSAGE_PATTERN_AUTH } from '@server/shared/message-pattern/auth';
 import { CreateAccountDto } from '@server/shared/dtos/account';
 
 @Controller()
