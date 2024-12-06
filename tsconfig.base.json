@@ -15,17 +15,35 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@client/libs/app-shell": ["libs/client/app-shell/src/index.ts"],
-      "@client/libs/chat": ["libs/client/chat/src/index.ts"],
-      "@client/libs/account": ["libs/client/account/src/index.ts"],
+      "@client/app-shell": ["libs/client/app-shell/feature/src/index.ts"],
+      "@client/chat": ["libs/client/chat/feature/src/index.ts"],
+      "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
+      "@client/chat/store": [
+        "libs/client/chat/data-access/src/lib/store/index.ts"
+      ],
+      "@client/layout": ["libs/client/app-shell/ui/layout/src/index.ts"],
+      "@client/layout/side-bar": [
+        "libs/client/app-shell/ui/side-bar/src/index.ts"
+      ],
+      "@client/page-not-found": [
+        "libs/client/shared/ui/page-not-found/src/index.ts"
+      ],
+      "@client/socket": ["libs/client/shared/provider/socket/src/index.ts"],
+      "@client/user": ["libs/client/user/feature/src/index.ts"],
+      "@client/user/data-access": ["libs/client/user/data-access/src/index.ts"],
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
+      "@client/guard/auth": ["libs/client/shared/guard/src/lib/auth.guard.ts"],
       "@nest-monorepo/guards": ["libs/server/shared/guards/src/index.ts"],
       "@nest-monorepo/microservice": [
         "libs/server/shared/microservice/src/index.ts"
       ],
       "@nest-monorepo/pipes": ["libs/server/shared/pipes/src/index.ts"],
+      "@nest-monorepo/user-data-access": [
+        "libs/client/user/data-access/src/index.ts"
+      ],
+      "@nest-monorepo/user-feature": ["libs/client/user/feature/src/index.ts"],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],
