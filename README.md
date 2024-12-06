@@ -1,17 +1,4 @@
-## Nx
-
-https://nx.dev/
-
-Nx is a suite of powerful, extensible dev tools to help you architect, test, and build at any scale — integrating seamlessly with modern technologies and libraries while providing a robust CLI, caching, dependency management, and more.
-
-It has first-class support for many frontend and backend technologies, so its documentation comes in multiple flavours.
-
-## Principles
-
-Below is the sample folder structure for Nx with NestJS and Angular. Our principles are:
-
-- SCAMs (single component Angular modules) for tree-shakable components, meaning each component will have a respective module. For example, a `RegisterComponent` will have a corresponding `RegisterModule`, we won't declare `RegisterComponent` as part of `AuthModule` for example.
-- Mostly everything will stay in the `libs` folder. New modules, new models, new configurations, new components etc... are in libs. libs should be separated into different directories based on existing apps. We won't put them inside the `apps` folder. For example in an Angular, it contains the `main.ts`, `app.component.ts` and `app.module.ts`
+## NX Workspace - TMP ( Michael Tran)
 
 ## Structure
 

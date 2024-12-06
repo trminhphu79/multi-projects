@@ -4,6 +4,7 @@ const { join } = require('path');
 module.exports = {
   output: {
     path: join(__dirname, '../../../dist/apps/server/chat'),
+    filename: 'main.js'
   },
   plugins: [
     new NxAppWebpackPlugin({
@@ -12,6 +13,7 @@ module.exports = {
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
       assets: ['./src/assets'],
+      optimization: true,
       outputHashing: 'none',
       generatePackageJson: true,
     }),

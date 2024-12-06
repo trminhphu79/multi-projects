@@ -7,7 +7,12 @@
     "chat": "nx run chat:serve:development",
     "auth": "nx run auth:serve:development",
     "build:auth": "nx build auth",
-    "build:gateway": "nx build gateway"
+    "build:chat": "nx build chat",
+    "build:gateway": "nx build gateway",
+    "build-chatapp": "docker-compose --env-file .env.production build",
+    "run-chatapp": "docker-compose --env-file .env.production up -d",
+    "rebuild-services": "nx build chat && nx build gateway && nx build auth",
+    "build-run-chatapp": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env.production up --build -d"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +41,7 @@
     "mysql2": "^3.11.5",
     "nats": "^2.28.2",
     "ngx-socket-io": "^4.7.0",
+    "pg": "^8.13.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "sequelize": "^6.37.5",
