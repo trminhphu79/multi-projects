@@ -1,14 +1,17 @@
-import { Module } from '@nestjs/common';
-import { Message } from '@server/shared/entity/message';
+import { Global, Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ChannelModule } from './channel/channel.module';
-import { MessageModule } from './message/message.module';
-import { Profile } from '@server/shared/entity/profile';
-import { Conversation } from '@server/shared/entity/conversation';
 import { Account } from '@server/shared/entity/account';
+import { Conversation } from '@server/shared/entity/conversation';
+import { Message } from '@server/shared/entity/message';
+import { Profile } from '@server/shared/entity/profile';
 import { UserConversation } from '@server/shared/entity/user-conversation';
 
 @Module({
+  providers: [AuthService],
+  controllers: [AuthController],
+  exports: [AuthService],
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -28,10 +31,6 @@ import { UserConversation } from '@server/shared/entity/user-conversation';
       Account,
       UserConversation,
     ]),
-    ChannelModule,
-    MessageModule,
   ],
-  controllers: [],
-  providers: [],
 })
-export class AppModule {}
+export class AuthModule {}

@@ -2,7 +2,7 @@ import { Controller, Inject, Get, Logger, Post, Body } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { catchError, tap } from 'rxjs';
 import { MESSAGE_PATTERN_AUTH } from '@server/shared/message-pattern';
-import { CreateAccountDto } from '@server/shared/dtos';
+import { CreateAccountDto } from '@server/shared/dtos/account';
 
 @Controller('auth')
 export class AuthController {

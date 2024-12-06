@@ -1,19 +1,28 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
+
 @Controller()
-export class AppController {
+export class MessageController {
   private chatMessages: { sender: string; message: string }[] = [];
 
   @MessagePattern(MESSAGE_PATTERN_CHAT.SEND)
-  handleChatMessage(payload: { sender: string; message: string }): {
+  send(payload: { sender: string; message: string }): {
     sender: string;
     message: string;
   } {
     console.log(`Message received from ${payload.sender}: ${payload.message}`);
-    // Store the message (or perform other business logic)
     this.chatMessages.push(payload);
-    // Return the message back to the Gateway
     return payload;
+  }
+
+  @MessagePattern(MESSAGE_PATTERN_CHAT.PAGING)
+  paging(payload: any) {
+    return [];
+  }
+
+  @MessagePattern(MESSAGE_PATTERN_CHAT.DELETE)
+  delete(payload: any) {
+    return [];
   }
 }

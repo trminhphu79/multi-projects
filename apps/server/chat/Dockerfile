@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY ./dist/apps/server/chat/package.json ./package.json
 
 # Install app dependencies
-RUN npm install --force
+RUN npm install pg --force
 
 # Bundle app source
 COPY ./dist/apps/server/chat ./dist

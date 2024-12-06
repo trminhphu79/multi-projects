@@ -2,6 +2,7 @@ import { MICRO_SERVICE_NAMES } from '../microservice';
 
 const MODULES_NAME = Object.freeze({
   AUTH: `${MICRO_SERVICE_NAMES.AUTH_SERVICE}/AUTH_MODULE`,
+  PROFILE: `${MICRO_SERVICE_NAMES.AUTH_SERVICE}/PROFILE_MODULE`,
 });
 
 export const MESSAGE_PATTERN_AUTH = Object.freeze({
@@ -11,4 +12,8 @@ export const MESSAGE_PATTERN_AUTH = Object.freeze({
 
   SIGN_IN: `${MODULES_NAME.AUTH}/sign-in`,
   REFRESH_TOKEN: `${MODULES_NAME.AUTH}/refresh-token`,
+});
+
+export const MESSAGE_PATTERN_PROFILE = Object.freeze({
+  UPDATE: `${MODULES_NAME.PROFILE}/update`,
 });

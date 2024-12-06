@@ -5,7 +5,9 @@ import {
   PrimaryKey,
   AutoIncrement,
   DataType,
+  HasMany,
 } from 'sequelize-typescript';
+import { Profile } from './profile.entity';
 
 @Table({ tableName: 'account' })
 export class Account extends Model {
@@ -13,6 +15,9 @@ export class Account extends Model {
   @AutoIncrement
   @Column
   override id: number;
+
+  @HasMany(() => Profile)
+  profiles: Profile[];
 
   @Column
   username: string;
