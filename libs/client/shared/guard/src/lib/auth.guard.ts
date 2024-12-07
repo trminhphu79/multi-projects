@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-
+import { AppStore } from '@client/store/store';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  router: Router = inject(Router);
+  appState = inject(AppStore);
 
   canActivate(): boolean {
-    const user = {};
-    if (user) {
-      return true; // Allow access if the user is authenticated
+    console.log('canActivate: ', this.appState.user());
+    if (this.appState.user.isAuthenticated?.()) {
+      return true;
     } else {
-      this.router.navigate(['/user']); // Redirect to login if not authenticated
-      return false; // Prevent access to the route
+      this.router.navigate(['/user']);
+      return false;
     }
   }
 }

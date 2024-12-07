@@ -22,7 +22,10 @@
             "input": "apps/client/chat-with-me/public"
           }
         ],
-        "styles": ["apps/client/chat-with-me/src/styles.scss"],
+        "styles": [
+          "apps/client/chat-with-me/src/styles.scss"
+         
+        ],
         "scripts": []
       },
       "configurations": {
