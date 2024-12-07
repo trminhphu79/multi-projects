@@ -9,12 +9,15 @@ import { appRoutes } from '@client/app-shell';
 import { provideSocketIo } from '@client/provider/socket';
 import { providerAppState } from '@client/provider/app-state';
 import { INITIAL_APP_STATE } from './app.state';
+import { provideHttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     providerAppState(INITIAL_APP_STATE),
     provideAnimations(),
-    importProvidersFrom(provideSocketIo()),
+    importProvidersFrom(provideSocketIo(), MessageService),
     provideRouter(appRoutes, withViewTransitions()),
     provideZoneChangeDetection({ eventCoalescing: true }),
   ],

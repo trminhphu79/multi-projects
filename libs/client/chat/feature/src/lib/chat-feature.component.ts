@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { distinctUntilChanged, debounceTime, tap, filter } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 import { CommonModule } from '@angular/common';
+import { AppStore } from '@client/store/store';
 
 @Component({
   selector: 'lib-chat-feature',
@@ -24,6 +25,9 @@ export class ChatFeatureComponent {
   chatInputControl = new FormControl('');
   userControl = new FormControl(null);
   socket = inject(Socket);
+  appState = inject(AppStore);
+
+  user = this.appState.user;
 
   messages: WritableSignal<Array<any>> = signal([]);
   senderAvatar = signal(
@@ -40,14 +44,14 @@ export class ChatFeatureComponent {
       .pipe(
         distinctUntilChanged(),
         debounceTime(50),
-        filter(() => !!this.userControl.value),
+        filter(() => !!this.user().email),
         tap((value) => {
           if (!value) {
             return;
           }
 
           this.socket.emit('sendMessage', {
-            sender: this.userControl.value,
+            sender: this.user().email,
             message: value,
             timestamp: new Date(),
           });

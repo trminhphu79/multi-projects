@@ -1,8 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { from, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { from, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { Account } from '@server/shared/entity/account';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateAccountDto } from '@server/shared/dtos/account';
+import {
+  CreateAccountDto,
+  SignInAccountDto,
+} from '@server/shared/dtos/account';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +40,27 @@ export class AuthService {
           message: 'Create successfully!!',
           data: reuslt,
         });
+      })
+    );
+  }
+
+  signIn(payload: SignInAccountDto) {
+    return from(
+      this.userModel.findOne({
+        where: {
+          username: payload.username,
+          password: payload.password,
+        },
+      })
+    ).pipe(
+      switchMap((response) => {
+        if (!response) {
+          return throwError(() => new BadRequestException());
+        }
+        return of(response);
+      }),
+      tap((response) => {
+        console.log("response: ", response);
       })
     );
   }

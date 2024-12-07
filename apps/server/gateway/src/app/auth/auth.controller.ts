@@ -11,10 +11,25 @@ export class AuthController {
     private natsClient: ClientProxy
   ) {}
 
-  @Post()
+  @Post('registation')
   createUser(@Body() payload: CreateAccountDto) {
     return this.natsClient
       .send({ cmd: MESSAGE_PATTERN_AUTH.CREATE }, payload)
+      .pipe(
+        catchError((error) => {
+          Logger.error('Get Action: CREATE_ACCOUNT error!!');
+          return error;
+        }),
+        tap((data) => {
+          Logger.log('Get Action: CREATE_ACCOUNT successfully!!', data);
+        })
+      );
+  }
+
+  @Post('authenticate')
+  signIn(@Body() payload: CreateAccountDto) {
+    return this.natsClient
+      .send({ cmd: MESSAGE_PATTERN_AUTH.SIGN_IN }, payload)
       .pipe(
         catchError((error) => {
           Logger.error('Get Action: CREATE_ACCOUNT error!!');

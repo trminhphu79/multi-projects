@@ -35,15 +35,22 @@
       "@client/provider/socket": [
         "libs/client/shared/provider/socket/src/index.ts"
       ],
+      "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
+
+
       "@client/store/model": ["libs/client/shared/store/src/lib/model.ts"],
       "@client/store/state": ["libs/client/shared/store/src/lib/state.ts"],
       "@client/store/store": ["libs/client/shared/store/src/lib/store.ts"],
       "@client/store/token": ["libs/client/shared/store/src/lib/token.ts"],
       "@client/user": ["libs/client/user/feature/src/index.ts"],
-      "@client/user/data-access": ["libs/client/user/data-access/src/index.ts"],
+      "@client/user/data-access/model": [
+        "libs/client/user/data-access/src/lib/user.model.ts"
+      ],
+      "@client/user/data-access/service": [
+        "libs/client/user/data-access/src/lib/user.service.ts"
+      ],
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
-
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
@@ -51,7 +58,6 @@
       "@nest-monorepo/microservice": [
         "libs/server/shared/microservice/src/index.ts"
       ],
-
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],

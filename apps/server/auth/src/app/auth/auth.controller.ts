@@ -12,4 +12,9 @@ export class AuthController {
   createAccount(body: CreateAccountDto) {
     return this.service.createOne(body);
   }
+
+  @MessagePattern({ cmd: MESSAGE_PATTERN_AUTH.SIGN_IN })
+  signIn(body: CreateAccountDto) {
+    return this.service.signIn(body);
+  }
 }
