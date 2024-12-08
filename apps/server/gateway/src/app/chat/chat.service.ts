@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
+import { SendMessageDto } from '@server/shared/dtos/message';
+
 @Injectable()
 export class ChatService {
   constructor(
@@ -8,7 +10,7 @@ export class ChatService {
     private natsClient: ClientProxy
   ) {}
 
-  sendMessageToChat(payload: { sender: string; message: string }) {
+  sendMessageToChat(payload: SendMessageDto) {
     return this.natsClient.send(MESSAGE_PATTERN_CHAT.SEND, payload);
   }
 }

@@ -25,11 +25,8 @@
     }
   </div>
   <div class="flex flex-column">
-    <p-avatar
-      image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-      shape="circle"
-      class="text-center cursor-pointer mb-2"
-    />
+    <p-avatar [image]="avatarUrl()" shape="circle" class="text-center
+    cursor-pointer mb-2" />
     <a
       pTooltip="Sign out"
       tooltipPosition="right"
@@ -43,3 +40,13 @@
     </a>
   </div>
 </div>
+
+<lib-add-friend-dialog
+  [profileData]="profileData()"
+  [visible]="toggleAddFriendDialog()"
+  (cancelChanges)="onCancelDialog()"
+  (saveChanges)="onSaveFriend($event)"
+  (searchProfileChanges)="onSearchProfile($event)"
+></lib-add-friend-dialog>
+
+<p-toast position="top-center" key="my-toast" />

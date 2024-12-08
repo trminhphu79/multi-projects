@@ -12,6 +12,7 @@ import {
 import { Conversation } from './conversation.entity';
 import { Account } from './account.entity';
 import { UserConversation } from './user-conversation.entity';
+import { Friend } from './friend.entity';
 
 @Table({ tableName: 'profile' })
 export class Profile extends Model {
@@ -56,4 +57,7 @@ export class Profile extends Model {
     defaultValue: DataType.NOW,
   })
   override updatedAt: Date;
+
+  @BelongsToMany(() => Profile, () => Friend, 'profileId', 'friendId')
+  friends: Profile[];
 }

@@ -4,6 +4,7 @@ import {
   signalStore,
   withState,
   patchState,
+  withComputed,
 } from '@ngrx/signals';
 import { INITIAL_APP_STATE } from './state';
 import { AppState, UserState } from './model';

@@ -6,12 +6,15 @@ import {
   CreateAccountDto,
   SignInAccountDto,
 } from '@server/shared/dtos/account';
+import { Profile } from '@server/shared/entity/profile';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(Account)
-    private userModel: typeof Account
+    private userModel: typeof Account,
+    @InjectModel(Profile)
+    private profileModel: typeof Profile
   ) {}
 
   createOne(payload: CreateAccountDto): Observable<any> {
@@ -24,22 +27,30 @@ export class AuthService {
         },
       })
     ).pipe(
-      switchMap((response) => {
-        const [value, isCreated] = response;
+      switchMap(async ([account, isCreated]) => {
         if (!isCreated) {
-          return of({
-            message: 'User Existing!!',
+          return {
+            message: 'User already exists!',
             data: payload,
-          });
+          };
         }
 
-        const reuslt = value.toJSON();
-        delete reuslt.password;
-
-        return of({
-          message: 'Create successfully!!',
-          data: reuslt,
+        // Create a profile for the newly created account
+        const profile = await this.profileModel.create({
+          accountId: account.id,
+          fullName: account.username || 'default-name',
+          avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.washingtonpost.com%2Fhome%2F2024%2F03%2F12%2Fcats-behavior-misunderstood%2F&psig=AOvVaw1Vs8ps4ceREBAC6dcXaV-W&ust=1733737444933000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPC-4Lzxl4oDFQAAAAAdAAAAABAE',
+          bio: 'Chat with me',
         });
+
+        const result = account.toJSON();
+        delete result.password;
+
+        return {
+          message: 'Account and profile created successfully!',
+          account: result,
+          profile,
+        };
       })
     );
   }
@@ -55,12 +66,14 @@ export class AuthService {
     ).pipe(
       switchMap((response) => {
         if (!response) {
-          return throwError(() => new BadRequestException());
+          return throwError(
+            () => new BadRequestException('Invalid credentials')
+          );
         }
         return of(response);
       }),
       tap((response) => {
-        console.log("response: ", response);
+        console.log('response: ', response);
       })
     );
   }

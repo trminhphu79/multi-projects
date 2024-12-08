@@ -9,5 +9,7 @@
   <lib-chatting
     class="col-12 md:col-8 p-0 h-full"
     [sender]="conversation()"
+    [messages]="messages()"
+    (sendMessage)="onSendMessage($event)"
   ></lib-chatting>
 </section>

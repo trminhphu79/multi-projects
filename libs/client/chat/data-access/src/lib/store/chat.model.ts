@@ -7,13 +7,14 @@ export type Conversation = {
 };
 
 export type Message = {
-  mesage: string;
+  message: string;
   senderId: number;
   receiverId: number;
-  type: MessageEnum;
+  type?: MessageEnum;
 };
 
 export type ChatScreenState = {
   conversations: Conversation[];
   isLoading: boolean;
+  messages: Partial<Message>[];
 };

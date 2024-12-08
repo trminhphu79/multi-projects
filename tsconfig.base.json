@@ -57,6 +57,9 @@
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
       "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
+      "@client/app-shell/add-friend-dialog": [
+        "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
+      ],
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
@@ -67,8 +70,11 @@
       "@nest-monorepo/microservice": [
         "libs/server/shared/microservice/src/index.ts"
       ],
-      "@nest-monorepo/profile-data-access": [
-        "libs/client/profile/data-access/src/index.ts"
+      "@client/profile/model": [
+        "libs/client/profile/data-access/src/lib/profile.model.ts"
+      ],
+      "@client/profile/service": [
+        "libs/client/profile/data-access/src/lib/profile.service.ts"
       ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
@@ -92,6 +98,9 @@
       ],
       "@server/shared/entity/conversation": [
         "libs/server/shared/entities/src/lib/conversation.entity.ts"
+      ],
+      "@server/shared/entity/friend": [
+        "libs/server/shared/entities/src/lib/friend.entity.ts"
       ],
       "@server/shared/entity/message": [
         "libs/server/shared/entities/src/lib/message.entity.ts"

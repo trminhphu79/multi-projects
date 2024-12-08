@@ -6,6 +6,7 @@ import { Account } from '@server/shared/entity/account';
 import { Conversation } from '@server/shared/entity/conversation';
 import { Message } from '@server/shared/entity/message';
 import { Profile } from '@server/shared/entity/profile';
+import { Friend } from '@server/shared/entity/friend';
 import { UserConversation } from '@server/shared/entity/user-conversation';
 
 @Module({
@@ -20,15 +21,23 @@ import { UserConversation } from '@server/shared/entity/user-conversation';
       username: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Message, Profile, Conversation, Account, UserConversation],
+      models: [
+        Friend,
+        Account,
+        Message,
+        Profile,
+        Conversation,
+        UserConversation,
+      ],
       autoLoadModels: true,
       synchronize: true,
     }),
     SequelizeModule.forFeature([
+      Friend,
       Message,
       Profile,
-      Conversation,
       Account,
+      Conversation,
       UserConversation,
     ]),
   ],

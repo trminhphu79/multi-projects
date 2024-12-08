@@ -20,7 +20,7 @@ export class Conversation extends Model {
   override id: number;
 
   @Column({
-    allowNull: false, // Use this instead of @NotNull
+    allowNull: false,
   })
   name: string;
 
@@ -28,7 +28,7 @@ export class Conversation extends Model {
   users: Profile[];
 
   @HasMany(() => Message)
-  messsages: Message[];
+  messages: Message[];
 
   @Column({
     type: DataType.DATE,

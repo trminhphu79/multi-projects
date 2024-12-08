@@ -4,6 +4,7 @@ export type Conversation = {
   unread: boolean;
   time: string;
   avatarUrl?: string;
+  profileId: number;
 };
 
 export type MessageCategory = {
@@ -14,6 +15,9 @@ export type MessageCategory = {
 export type Message = {
   id: number; // Unique identifier for the message
   conversationId: number;
+  senderId: number;
+  isSender: boolean;
+  isReceiver: boolean;
   sender: {
     id: string; // Sender's unique identifier
     name: string; // Sender's display name
@@ -41,4 +45,4 @@ export type Message = {
   isDeleted?: boolean; // Optional flag to indicate if the message has been deleted
 };
 
-export type Messages = Array<Message>;
+export type Messages = Array<Partial<Message>>;

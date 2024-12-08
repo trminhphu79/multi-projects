@@ -14,13 +14,14 @@ import { SignInComponent } from '@client/user/sign-in';
 import { RegisterComponent } from '@client/user/register';
 import { ToastModule } from 'primeng/toast';
 import { UserService } from '@client/user/data-access/service';
-import { catchError, delay, EMPTY, tap } from 'rxjs';
+import { catchError, delay, EMPTY, map, switchMap, tap } from 'rxjs';
 import {
   UserSignInPayload,
   UserSignUpPayload,
 } from '@client/user/data-access/model';
 import { ToastService } from '@client/util/toast';
 import { MessageService } from 'primeng/api';
+import { ProfileService } from '@client/profile/service';
 @Component({
   selector: 'lib-user-feature',
   standalone: true,
@@ -38,29 +39,41 @@ import { MessageService } from 'primeng/api';
   styleUrl: './user-feature.component.css',
 })
 export class UserFeatureComponent {
-  appState = inject(AppStore);
-  router = inject(Router);
-  service = inject(UserService);
-  toastService = inject(ToastService);
+  private router = inject(Router);
+  private service = inject(UserService);
+  private appState = inject(AppStore);
+  private toastService = inject(ToastService);
+  private profileService = inject(ProfileService);
 
-  screenState = signal('SIGN_IN');
+  protected screenState = signal('SIGN_IN');
 
-  signIn(value: UserSignInPayload) {
+  protected signIn(value: UserSignInPayload) {
     this.service
       .signIn(value)
       .pipe(
-        catchError((error) => {
+        catchError(() => {
           this.toastService.showMessage(
             'error',
             'Username or password incorrect!'
           );
           return EMPTY;
         }),
-        tap((response) => {
+        tap(() => {
           this.toastService.showMessage('success', 'Login success!');
+        }),
+        switchMap((response: any) => {
+          return this.profileService.getUserFriends(response.id).pipe(
+            map((userFriend) => {
+              return {
+                ...response,
+                profile: userFriend,
+              };
+            })
+          );
         }),
         delay(500),
         tap((response) => {
+          console.log('response: ', response);
           this.appState.setUser({ ...response, isAuthenticated: true });
           this.router.navigate(['/']);
         })
@@ -68,11 +81,11 @@ export class UserFeatureComponent {
       .subscribe();
   }
 
-  signUp(value: UserSignUpPayload) {
+  protected signUp(value: UserSignUpPayload) {
     this.service
       .signUp(value)
       .pipe(
-        catchError((error) => {
+        catchError(() => {
           this.toastService.showMessage('error', 'Register User Failed!');
           return EMPTY;
         }),
@@ -83,35 +96,18 @@ export class UserFeatureComponent {
           );
         }),
         delay(500),
-        tap((response) => {
+        tap(() => {
           this.changePage('SIGN_IN');
         })
       )
       .subscribe();
   }
 
-  loginForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-    });
-  }
-
-  onLogin() {
-    if (this.loginForm.valid) {
-      console.log('Login Data:', this.loginForm.value);
-    } else {
-      console.log('Form Invalid');
-    }
-  }
-
-  forgotPassword() {
+  protected forgotPassword() {
     console.log('Forgot Password Clicked');
   }
 
-  changePage(value: string) {
+  protected changePage(value: string) {
     this.screenState.set(value);
   }
 }

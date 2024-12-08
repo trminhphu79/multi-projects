@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-
+import { SendMessageDto} from '@server/shared/dtos/message';
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -26,13 +26,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.connectedClients.delete(client.id);
   }
   // Listen for "sendMessage" events from WebSocket clients
-  @SubscribeMessage('sendMessage')
-  handleMessage(client: Socket, payload: { sender: string; message: string }) {
-    console.log(`Message received from ${payload.sender}: ${payload.message}`);
+  @SubscribeMessage('SEND_MSG')
+  handleMessage(client: Socket, payload: SendMessageDto) {
+    console.log(`Message received from ${payload.senderId}: ${payload.message}`);
     // Forward the message to the Chat service via NATS
     this.gatewayService.sendMessageToChat(payload).subscribe((response) => {
         console.log("Value received from chat service: ", response)
-      this.server.emit('newMessage', response);
+      this.server.emit('NEW_MSG', response);
     });
   }
 }

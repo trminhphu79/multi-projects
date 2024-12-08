@@ -16,4 +16,7 @@ export const MESSAGE_PATTERN_AUTH = Object.freeze({
 
 export const MESSAGE_PATTERN_PROFILE = Object.freeze({
   UPDATE: `${MODULES_NAME.PROFILE}/update`,
+  ADD_FRIEND: `${MODULES_NAME.PROFILE}/add-friend`,
+  SEARCH_FRIEND: `${MODULES_NAME.PROFILE}/search-friend`,
+  GET_USER_FRIENDS: `${MODULES_NAME.PROFILE}/get-user-friend`,
 });

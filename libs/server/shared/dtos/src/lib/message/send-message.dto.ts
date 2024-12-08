@@ -1,5 +1,5 @@
 export class SendMessageDto {
-  conversationId: number;
+  conversationId?: number;
   message: string;
   senderId: number;
   receiverId: number;

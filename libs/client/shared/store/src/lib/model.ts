@@ -1,3 +1,18 @@
+export type Profile = {
+  id: number;
+  accountId: number;
+  fullName: string;
+  avatarUrl: string;
+  bio: string;
+  dob: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface ProfileWithFriends extends Profile {
+  friends: Profile[];
+}
+
 export type UserState = {
   id: number;
   name: string;
@@ -7,6 +22,7 @@ export type UserState = {
   isAuthenticated: boolean;
   avatarUrl?: string;
   preferences?: UserPreferences;
+  profile?: ProfileWithFriends;
 };
 
 export type UserPreferences = {
@@ -21,10 +37,11 @@ export type SideBarItem = {
   route: string;
   icon: string;
   badgeValue?: number;
-  selected: boolean;
+  redirect?: boolean;
+  externalLink?: boolean;
 };
 export type System = {
-  sideBar: SideBarItem[];
+  sideBar: Partial<SideBarItem>[];
 };
 
 export type AppState = {

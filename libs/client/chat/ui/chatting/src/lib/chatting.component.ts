@@ -7,6 +7,7 @@ import {
   inject,
   input,
   OnInit,
+  output,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -46,8 +47,10 @@ import {
   styleUrl: './chatting.component.scss',
 })
 export class ChattingComponent implements AfterViewInit {
-  messages = input<Messages[]>([]);
+  messages = input<Messages>([]);
   sender = input<Conversation | null>();
+
+  sendMessage = output<string>();
 
   @ViewChild('wrapperMessageContent', { static: true })
   protected wrapperMessageContent!: ElementRef<HTMLElement>;
@@ -110,7 +113,8 @@ export class ChattingComponent implements AfterViewInit {
         filter((e: any) => e.keyCode === 13),
         distinctUntilChanged(),
         tap((res) => {
-          console.log(res);
+          console.log("Chatting: ", res);
+          this.sendMessage.emit(res?.target?.value);
         })
       )
       .subscribe();

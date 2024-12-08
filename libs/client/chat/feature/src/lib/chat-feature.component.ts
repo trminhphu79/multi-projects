@@ -1,15 +1,14 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   Component,
+  computed,
   ElementRef,
   inject,
   signal,
   ViewChild,
-  WritableSignal,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { distinctUntilChanged, debounceTime, tap, filter } from 'rxjs';
-import { Socket } from 'ngx-socket-io';
 import { CommonModule } from '@angular/common';
 import { AppStore } from '@client/store/store';
 import { ChipModule } from 'primeng/chip';
@@ -18,6 +17,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { ConversationComponent } from '@client/chat/conversation';
 import { ChattingComponent } from '@client/chat/chatting';
 import { Conversation, MessageCategory } from '@client/chat/model';
+import { ChatStore } from '@client/chat/store';
 
 @Component({
   selector: 'lib-chat-feature',
@@ -32,6 +32,7 @@ import { Conversation, MessageCategory } from '@client/chat/model';
     ReactiveFormsModule,
     ConversationComponent,
   ],
+  providers: [ChatStore],
   templateUrl: './chat-feature.component.html',
   styleUrl: './chat-feature.component.css',
 })
@@ -39,10 +40,24 @@ export class ChatFeatureComponent {
   title = 'Chat with me';
   chatInputControl = new FormControl('');
   userControl = new FormControl(null);
-  socket = inject(Socket);
   appState = inject(AppStore);
   conversation = signal<Conversation | null>(null);
+  chatStore = inject(ChatStore);
+  messages = this.chatStore.messages;
 
+  conversations = computed(() => {
+    return this.appState.user().profile?.friends?.map((profile: any) => {
+      return {
+        ...profile,
+        sender: profile.fullName as string,
+        lastMessage: '...',
+        unread: true,
+        time: '2 mins ago',
+        avatarUrl: profile.avatarUrl,
+        profileId: profile.id,
+      };
+    }) as any[];
+  });
   messageCategories = signal<MessageCategory[]>([
     {
       label: 'All',
@@ -57,159 +72,157 @@ export class ChatFeatureComponent {
       selected: false,
     },
   ]);
-
-  conversations = signal<Conversation[]>([
-    {
-      sender: 'Trần Minh Phú',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-      avatarUrl:
-        'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
-    },
-    {
-      sender: 'Nguyễn Văn A',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-      avatarUrl:
-        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-      avatarUrl:
-        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      avatarUrl:
-        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Nguyễn Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn A',
-      lassMessage: 'Có đó không?',
-      unread: false,
-      time: '2 mins ago',
-    },
-    {
-      sender: 'Trần Văn B',
-      lassMessage: 'Có đó không?',
-      unread: true,
-      time: '2 mins ago',
-    },
-  ]);
+  // conversations = signal<Conversation[]>([
+  //   {
+  //     sender: 'Trần Minh Phú',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //     avatarUrl:
+  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //     avatarUrl:
+  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //     avatarUrl:
+  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     avatarUrl:
+  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Nguyễn Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn A',
+  //     lassMessage: 'Có đó không?',
+  //     unread: false,
+  //     time: '2 mins ago',
+  //   },
+  //   {
+  //     sender: 'Trần Văn B',
+  //     lassMessage: 'Có đó không?',
+  //     unread: true,
+  //     time: '2 mins ago',
+  //   },
+  // ]);
 
   user = this.appState.user;
 
-  messages: WritableSignal<Array<any>> = signal([]);
   senderAvatar = signal(
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTynVaVrlGzFHaL33Qx5QVLGdNiT1bB2IgS-g&s'
   );
@@ -218,27 +231,6 @@ export class ChatFeatureComponent {
   );
 
   @ViewChild('inputRef') inputRef!: ElementRef<HTMLInputElement>;
-
-  constructor() {
-    this.chatInputControl.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(50),
-        filter(() => !!this.user().email),
-        tap((value) => {
-          if (!value) {
-            return;
-          }
-
-          this.socket.emit('sendMessage', {
-            sender: this.user().email,
-            message: value,
-            timestamp: new Date(),
-          });
-        })
-      )
-      .subscribe();
-  }
 
   onSend($event: any) {
     this.chatInputControl.setValue($event?.target?.value);
@@ -252,27 +244,6 @@ export class ChatFeatureComponent {
     return `calc(100% - (${titleHeight - categoryHeight}px))`;
   }
 
-  ngAfterViewInit() {
-    this.socket.connect();
-    this.socket
-      .fromEvent('newMessage')
-      .pipe(
-        tap((msg: any) => {
-          this.messages.set([...this.messages(), msg]);
-        })
-      )
-      .subscribe();
-  }
-
-  getMessage() {
-    return;
-  }
-
-  ngOnDestroy() {
-    console.log('ngOnDestroy: COMP B desrtoy...');
-    this.socket.disconnect();
-  }
-
   onMessageCategoryChanges(event: MessageCategory) {
     console.log('onMessageCategoryChanges', event);
   }
@@ -280,5 +251,14 @@ export class ChatFeatureComponent {
   onConversationCategoryChanges(event: Conversation) {
     console.log('onConversationCategoryChanges', event);
     this.conversation.set(event);
+  }
+
+  onSendMessage(message: string) {
+    console.log('onSendMessage: ', message);
+    this.chatStore.sendMessage({
+      senderId: this.appState.user().profile?.id as number,
+      receiverId: this.conversation()?.profileId as number,
+      message,
+    });
   }
 }

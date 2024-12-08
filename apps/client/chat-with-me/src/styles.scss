@@ -69,3 +69,12 @@ p-chip {
 .hidden-scrollbar::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Edge */
 }
+
+.override-auto-complete {
+  .p-autocomplete {
+    width: 100%;
+    .p-autocomplete-input {
+      width: 100%;
+    }
+  }
+}

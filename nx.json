@@ -39,7 +39,8 @@
         "apps/nest-monorepo-e2e/**/*",
         "apps/server/gateway-e2e/**/*",
         "apps/server/auth-e2e/**/*",
-        "apps/server/chat-e2e/**/*"
+        "apps/server/chat-e2e/**/*",
+        "apps/server/profile-e2e/**/*"
       ]
     }
   ],
