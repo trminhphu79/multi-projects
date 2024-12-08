@@ -8,6 +8,7 @@ import { Conversation } from '@server/shared/entity/conversation';
 import { Account } from '@server/shared/entity/account';
 import { Friend } from '@server/shared/entity/friend';
 import { UserConversation } from '@server/shared/entity/user-conversation';
+import { ConversationModule } from './conversation/conversation.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserConversation } from '@server/shared/entity/user-conversation';
     }),
     ChannelModule,
     MessageModule,
+    ConversationModule
   ],
   controllers: [],
   providers: [],

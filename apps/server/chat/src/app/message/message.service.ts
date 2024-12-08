@@ -22,20 +22,24 @@ export class MessageService {
 
   async send(payload: SendMessageDto) {
     const { senderId, receiverId, message } = payload;
-  
+
     console.log('payload: ', payload);
-  
+
     // Validate sender and receiver profiles
     const sender = await this.profileModel.findByPk(senderId);
     if (!sender) {
-      throw new NotFoundException(`Sender profile with id ${senderId} not found`);
+      throw new NotFoundException(
+        `Sender profile with id ${senderId} not found`
+      );
     }
-  
+
     const receiver = await this.profileModel.findByPk(receiverId);
     if (!receiver) {
-      throw new NotFoundException(`Receiver profile with id ${receiverId} not found`);
+      throw new NotFoundException(
+        `Receiver profile with id ${receiverId} not found`
+      );
     }
-  
+
     // Check if conversation already exists
     const conversation = await this.conversationModel.findOne({
       include: [
@@ -53,21 +57,21 @@ export class MessageService {
       ],
       group: ['Conversation.id'], // Grouping by conversation
     });
-  
+
     let existingConversation = null;
-  
+
     if (!conversation) {
       // Create a new conversation if none exists
       existingConversation = await this.conversationModel.create({
         name: `Conversation between ${senderId} and ${receiverId}`,
       });
-  
+
       // Associate both users with the conversation
-      await existingConversation.$set('users', [senderId, receiverId]);
+      await existingConversation.$set('members', [senderId, receiverId]);
     } else {
       existingConversation = conversation;
     }
-  
+
     // Create the new message in the conversation
     const newMessage = await this.messageModel.create({
       senderId,
@@ -75,8 +79,22 @@ export class MessageService {
       conversationId: existingConversation.id,
       message,
     });
-  
+
     console.log('newMessage: ', newMessage);
     return newMessage;
+  }
+
+  async getConversationsByProfileId(
+    profileId: number
+  ): Promise<Conversation[]> {
+    return await this.conversationModel.findAll({
+      include: [
+        {
+          association: 'users', // Association defined in the Conversation model
+          where: { id: profileId },
+          through: { attributes: [] }, // Exclude join table attributes
+        },
+      ],
+    });
   }
 }

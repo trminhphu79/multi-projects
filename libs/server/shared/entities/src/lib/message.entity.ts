@@ -18,30 +18,20 @@ export class Message extends Model {
   @Column
   override id: number;
 
-  @BelongsTo(() => Profile, 'senderId')
-  sender: Profile;
-
-  @BelongsTo(() => Profile, 'receiverId')
-  receiver: Profile;
-
   @ForeignKey(() => Conversation)
   @Column
   conversationId: number;
 
-  @BelongsTo(() => Conversation)
-  conversation: Conversation;
+  @ForeignKey(() => Profile)
+  @Column
+  senderId: number;
 
-  @Column({
-    allowNull: false,
-  })
-  message: string;
+  @Column
+  content: string;
 
-  @Column({
-    type: DataType.STRING,
-    defaultValue: 'PERSONAL',
-  })
-  message_type: string;
-
+  @Column({ defaultValue: 'TEXT' })
+  messageType: string;
+  
   @Column({
     type: DataType.DATE,
     defaultValue: DataType.NOW,

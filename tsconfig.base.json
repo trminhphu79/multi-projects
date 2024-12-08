@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@client/app-shell": ["libs/client/app-shell/feature/src/index.ts"],
+      "@client/app-shell/add-friend-dialog": [
+        "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
+      ],
       "@client/chat": ["libs/client/chat/feature/src/index.ts"],
       "@client/chat/chatting": ["libs/client/chat/ui/chatting/src/index.ts"],
       "@client/chat/conversation": [
@@ -37,6 +40,12 @@
         "libs/client/shared/ui/page-not-found/src/index.ts"
       ],
       "@client/profile": ["libs/client/profile/feature/src/index.ts"],
+      "@client/profile/model": [
+        "libs/client/profile/data-access/src/lib/profile.model.ts"
+      ],
+      "@client/profile/service": [
+        "libs/client/profile/data-access/src/lib/profile.service.ts"
+      ],
       "@client/provider/app-state": [
         "libs/client/shared/provider/app-state/src/index.ts"
       ],
@@ -57,9 +66,6 @@
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
       "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
-      "@client/app-shell/add-friend-dialog": [
-        "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
-      ],
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
@@ -69,12 +75,6 @@
       ],
       "@nest-monorepo/microservice": [
         "libs/server/shared/microservice/src/index.ts"
-      ],
-      "@client/profile/model": [
-        "libs/client/profile/data-access/src/lib/profile.model.ts"
-      ],
-      "@client/profile/service": [
-        "libs/client/profile/data-access/src/lib/profile.service.ts"
       ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],

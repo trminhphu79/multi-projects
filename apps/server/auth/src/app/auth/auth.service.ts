@@ -39,7 +39,7 @@ export class AuthService {
         const profile = await this.profileModel.create({
           accountId: account.id,
           fullName: account.username || 'default-name',
-          avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.washingtonpost.com%2Fhome%2F2024%2F03%2F12%2Fcats-behavior-misunderstood%2F&psig=AOvVaw1Vs8ps4ceREBAC6dcXaV-W&ust=1733737444933000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPC-4Lzxl4oDFQAAAAAdAAAAABAE',
+          avatarUrl: this.randomImg(),
           bio: 'Chat with me',
         });
 
@@ -76,5 +76,17 @@ export class AuthService {
         console.log('response: ', response);
       })
     );
+  }
+
+  randomImg(): string {
+    const images = [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpTxZYsXlSi3QjP1ourPWa0ceS1-3qMP2yGw&s',
+      'https://wallpapershome.com/images/pages/pic_v/25654.jpg',
+      'https://imgcdn.stablediffusionweb.com/2024/9/19/c86d2133-6b44-4892-a830-a2b403df5798.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTynVaVrlGzFHaL33Qx5QVLGdNiT1bB2IgS-g&s',
+    ];
+
+    const randomIndex = Math.floor(Math.random() * images.length);
+    return images[randomIndex];
   }
 }

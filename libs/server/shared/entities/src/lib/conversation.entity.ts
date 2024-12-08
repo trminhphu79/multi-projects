@@ -1,12 +1,12 @@
 import {
-  Column,
-  Model,
-  Table,
-  PrimaryKey,
-  AutoIncrement,
-  DataType,
-  HasMany,
-  BelongsToMany,
+Column,
+Model,
+Table,
+PrimaryKey,
+AutoIncrement,
+DataType,
+HasMany,
+BelongsToMany,
 } from 'sequelize-typescript';
 import { Message } from './message.entity';
 import { Profile } from './profile.entity';
@@ -14,31 +14,29 @@ import { UserConversation } from './user-conversation.entity';
 
 @Table({ tableName: 'conversation' })
 export class Conversation extends Model {
-  @AutoIncrement
-  @PrimaryKey
-  @Column
-  override id: number;
+@AutoIncrement
+@PrimaryKey
+@Column
+override id: number;
 
-  @Column({
-    allowNull: false,
-  })
-  name: string;
+@Column
+name: string;
 
-  @BelongsToMany(() => Profile, () => UserConversation)
-  users: Profile[];
+@Column({ defaultValue: false })
+isGroup: boolean;
 
-  @HasMany(() => Message)
-  messages: Message[];
+@BelongsToMany(() => Profile, () => UserConversation)
+members: Profile[];
 
-  @Column({
-    type: DataType.DATE,
-    defaultValue: DataType.NOW,
-  })
-  override createdAt: Date;
+@Column({
+  type: DataType.DATE,
+  defaultValue: DataType.NOW,
+})
+override createdAt: Date;
 
-  @Column({
-    type: DataType.DATE,
-    defaultValue: DataType.NOW,
-  })
-  override updatedAt: Date;
+@Column({
+  type: DataType.DATE,
+  defaultValue: DataType.NOW,
+})
+override updatedAt: Date;
 }
