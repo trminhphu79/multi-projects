@@ -1,49 +1,13 @@
-<div class="chat-container">
-  <div class="message-list">
-    @if(messages().length === 0){
-    <div class="message-welcome">
-      <span> Welcome to talk with me application </span>
-    </div>
-    }
-
-    <div
-      *ngFor="let message of messages()"
-      [ngClass]="{
-        sent: message.sender === this.user.email?.(),
-        received: message.sender !== this.user.email?.()
-      }"
-      class="message-item"
-    >
-      <div class="message-avatar">
-        <img
-          [src]="
-            message.sender === this.user.email?.()
-              ? senderAvatar()
-              : recieverAvatar()
-          "
-          alt="Avatar"
-        />
-      </div>
-      <div class="message-content">
-        <p>{{ message.message }}</p>
-        <div class="timestamp">
-          <span class="message-sender-name">
-            {{ message.sender }}
-          </span>
-          <span class="message-time">{{
-            message.timestamp | date : 'shortTime'
-          }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Message Input -->
-  <div class="message-input bottom">
-    <input
-      type="text"
-      #inputRef
-      placeholder="Type a message and enter"
-      (keydown.enter)="onSend($event)"
-    />
-  </div>
-</div>
+<section class="w-full h-full grid overflow-hidden p-0 m-0">
+  <lib-conversation
+    class="hidden md:block md:col-4 border-right-1 border-blue-900 h-full"
+    [messageCategoies]="messageCategories()"
+    [conversations]="conversations()"
+    (selecteMessageCategoryChanges)="onMessageCategoryChanges($event)"
+    (selectConversationChanges)="onConversationCategoryChanges($event)"
+  ></lib-conversation>
+  <lib-chatting
+    class="col-12 md:col-8 p-0 h-full"
+    [sender]="conversation()"
+  ></lib-chatting>
+</section>

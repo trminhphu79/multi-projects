@@ -1,0 +1,77 @@
+<section class="w-full h-full">
+  <section
+    class="pt-3 pb-1 border-bottom-1 border-blue-900 w-full column-gap-3 flex min-h-max px-4 flex align-items-center"
+  >
+    <section class="w-full column-gap-3 flex">
+      <p-avatar
+        [image]="sender()?.avatarUrl"
+        size="large"
+        shape="circle"
+      ></p-avatar>
+      <section class="w-full flex flex-column">
+        <span class="mb-1">{{ sender()?.sender }}</span>
+        <div class="text-xs text-color">{{ sender()?.time }}</div>
+      </section>
+    </section>
+    <section class="ml-auto h-full flex align-items-center">
+      <i
+        class="pi pi-info-circle text-2xl text-color cursor-pointer"
+        [pTooltip]="'View infor'"
+        tooltipPosition="right"
+      ></i>
+    </section>
+  </section>
+  <section
+    class="w-full relative"
+    #wrapperMessageContent
+    style="height: calc(100% - 73px)"
+  >
+    <section
+      #messageListRef
+      class="overflow-y-auto mt-2 px-2"
+      [style.height]="computedMessageContentHeight()"
+    >
+      @for (item of
+      [3,9,4,6,5,6,1,8,2,10,1,2,5,660,1,2,5,660,1,2,5,660,1,2,5,660,1,2,5,66,1,8,2,10,1,2,5,6,7,8,9,1,2];
+      track $index) { @if(item > 5){
+      <section
+        class="ml-auto mb-4 col-6 column-gap-2 min-h-max bg-blue-800 py-2 px-2 border-round-bottom-md border-round-left cursor-pointer transition-duration-200"
+      >
+        <div>
+          Message herreMessage herreMessage herreMessage herreMessage
+          herreMessage herreMessage herreMessage herreMessage herreMessage
+          herreMessage herreMessage herreMessage herre
+        </div>
+        <p class="text-xs p-0 mx-0 mb-0 mt-2">2 phút trước</p>
+      </section>
+      } @else {
+      <section
+        class="mr-auto mb-4 col-6 column-gap-2 min-h-max bg-gray-800 py-2 px-2 border-round-bottom-md border-round-right cursor-pointer transition-duration-200"
+      >
+        <div>Message herre</div>
+        <p class="text-xs p-0 mx-0 mb-0 mt-2">2 phút trước</p>
+      </section>
+      } }
+    </section>
+    <section
+      class="fixed bottom-0"
+      [style.width]="wrapperMessageContent.offsetWidth + 'px'"
+    >
+      <p-iconField iconPosition="right" class="w-full">
+        <p-inputIcon styleClass="pi pi-send" tooltipPosition="right" />
+        <!-- @if(searching()){
+        <p-inputIcon styleClass="pi pi-spinner pi-spin" />
+        } @else {
+        <p-inputIcon styleClass="pi pi-search" />
+        } -->
+        <input
+          type="text"
+          pInputText
+          #chatControlRef
+          placeholder="Typing message..."
+          class="py-2 transition-duration-300 h-3rem text-base text-color surface-ground p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+      </p-iconField>
+    </section>
+  </section>
+</section>

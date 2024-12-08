@@ -1,5 +1,5 @@
 const nx = require('@nx/eslint-plugin');
-const baseConfig = require('../../../../../eslint.config.js');
+const baseConfig = require('../../../../eslint.config.js');
 
 module.exports = [
   ...baseConfig,
@@ -29,9 +29,6 @@ module.exports = [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {
-      '@angular-eslint/template/click-events-have-key-events': ['off'],
-      '@angular-eslint/template/interactive-supports-focus': ['off'],
-    },
+    rules: {},
   },
 ];

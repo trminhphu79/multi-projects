@@ -28,6 +28,13 @@ export const AppStore = signalStore(
     resetState() {
       patchState(store, INITIAL_APP_STATE);
     },
+    signOut() {
+      patchState(store, {
+        user: {
+          isAuthenticated: false,
+        },
+      });
+    },
   })),
   withHooks({
     onDestroy(store) {

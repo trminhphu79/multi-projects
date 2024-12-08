@@ -9,5 +9,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'talk-with-me';
+  title = 'Chat with me';
 }

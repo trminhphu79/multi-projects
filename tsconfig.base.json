@@ -17,7 +17,14 @@
     "paths": {
       "@client/app-shell": ["libs/client/app-shell/feature/src/index.ts"],
       "@client/chat": ["libs/client/chat/feature/src/index.ts"],
+      "@client/chat/chatting": ["libs/client/chat/ui/chatting/src/index.ts"],
+      "@client/chat/conversation": [
+        "libs/client/chat/ui/conversation/src/index.ts"
+      ],
       "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
+      "@client/chat/model": [
+        "libs/client/chat/data-access/src/lib/model/index.ts"
+      ],
       "@client/chat/store": [
         "libs/client/chat/data-access/src/lib/store/index.ts"
       ],
@@ -29,15 +36,13 @@
       "@client/page-not-found": [
         "libs/client/shared/ui/page-not-found/src/index.ts"
       ],
+      "@client/profile": ["libs/client/profile/feature/src/index.ts"],
       "@client/provider/app-state": [
         "libs/client/shared/provider/app-state/src/index.ts"
       ],
       "@client/provider/socket": [
         "libs/client/shared/provider/socket/src/index.ts"
       ],
-      "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
-
-
       "@client/store/model": ["libs/client/shared/store/src/lib/model.ts"],
       "@client/store/state": ["libs/client/shared/store/src/lib/state.ts"],
       "@client/store/store": ["libs/client/shared/store/src/lib/store.ts"],
@@ -51,12 +56,19 @@
       ],
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
+      "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
       "@nest-monorepo/decorators": [
         "libs/server/shared/decorators/src/index.ts"
       ],
       "@nest-monorepo/guards": ["libs/server/shared/guards/src/index.ts"],
+      "@nest-monorepo/message-container": [
+        "libs/client/chat/ui/message-container/src/index.ts"
+      ],
       "@nest-monorepo/microservice": [
         "libs/server/shared/microservice/src/index.ts"
+      ],
+      "@nest-monorepo/profile-data-access": [
+        "libs/client/profile/data-access/src/index.ts"
       ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],

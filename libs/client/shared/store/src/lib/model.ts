@@ -15,6 +15,19 @@ export type UserPreferences = {
   notificationsEnabled: boolean;
 };
 
+export type SideBarItem = {
+  label: string;
+  tooltip: string;
+  route: string;
+  icon: string;
+  badgeValue?: number;
+  selected: boolean;
+};
+export type System = {
+  sideBar: SideBarItem[];
+};
+
 export type AppState = {
   user: Partial<UserState>;
+  system: System;
 };

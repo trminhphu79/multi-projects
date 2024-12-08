@@ -12,20 +12,200 @@ import { distinctUntilChanged, debounceTime, tap, filter } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 import { CommonModule } from '@angular/common';
 import { AppStore } from '@client/store/store';
+import { ChipModule } from 'primeng/chip';
+import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { ConversationComponent } from '@client/chat/conversation';
+import { ChattingComponent } from '@client/chat/chatting';
+import { Conversation, MessageCategory } from '@client/chat/model';
 
 @Component({
   selector: 'lib-chat-feature',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    ChipModule,
+    CardModule,
+    CommonModule,
+    RouterModule,
+    AvatarModule,
+    ChattingComponent,
+    ReactiveFormsModule,
+    ConversationComponent,
+  ],
   templateUrl: './chat-feature.component.html',
   styleUrl: './chat-feature.component.css',
 })
 export class ChatFeatureComponent {
-  title = 'talk-with-me';
+  title = 'Chat with me';
   chatInputControl = new FormControl('');
   userControl = new FormControl(null);
   socket = inject(Socket);
   appState = inject(AppStore);
+  conversation = signal<Conversation | null>(null);
+
+  messageCategories = signal<MessageCategory[]>([
+    {
+      label: 'All',
+      selected: true,
+    },
+    {
+      label: 'Unread',
+      selected: false,
+    },
+    {
+      label: 'Groups',
+      selected: false,
+    },
+  ]);
+
+  conversations = signal<Conversation[]>([
+    {
+      sender: 'Trần Minh Phú',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+      avatarUrl:
+        'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
+    },
+    {
+      sender: 'Nguyễn Văn A',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+      avatarUrl:
+        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+      avatarUrl:
+        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      avatarUrl:
+        'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Nguyễn Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn A',
+      lassMessage: 'Có đó không?',
+      unread: false,
+      time: '2 mins ago',
+    },
+    {
+      sender: 'Trần Văn B',
+      lassMessage: 'Có đó không?',
+      unread: true,
+      time: '2 mins ago',
+    },
+  ]);
 
   user = this.appState.user;
 
@@ -68,6 +248,10 @@ export class ChatFeatureComponent {
     this.userControl.setValue($event?.target?.value);
   }
 
+  calcHeight(titleHeight: number, categoryHeight: number): string {
+    return `calc(100% - (${titleHeight - categoryHeight}px))`;
+  }
+
   ngAfterViewInit() {
     this.socket.connect();
     this.socket
@@ -87,5 +271,14 @@ export class ChatFeatureComponent {
   ngOnDestroy() {
     console.log('ngOnDestroy: COMP B desrtoy...');
     this.socket.disconnect();
+  }
+
+  onMessageCategoryChanges(event: MessageCategory) {
+    console.log('onMessageCategoryChanges', event);
+  }
+
+  onConversationCategoryChanges(event: Conversation) {
+    console.log('onConversationCategoryChanges', event);
+    this.conversation.set(event);
   }
 }

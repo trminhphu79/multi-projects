@@ -1,1 +1,45 @@
-<p>side-bar works!</p>
+<div
+  class="w-full h-screen bg-gray-900 flex flex-column py-8 justify-content-between border-round-md"
+>
+  <div class="flex flex-column">
+    @for (item of sideBarItems(); track $index) {
+    <a
+      (click)="onSelect(item, $index)"
+      [pTooltip]="item.tooltip"
+      tooltipPosition="right"
+      class="px-2 py-3 p-menuitem-link mb-2 {{
+        $index === selectedSideBar().index ? 'bg-gray-800' : 'bg-gray-900'
+      }} hover:bg-gray-800 transition-duration-200 cursor-pointer text-center border-round-md"
+    >
+      @if(item.badgeValue){
+      <span
+        class="text-color text-2xl"
+        pBadge
+        [value]="item.badgeValue"
+        [class]="item.icon"
+      ></span>
+      } @else {
+      <span class="text-color text-2xl" [class]="item.icon"></span>
+      }
+    </a>
+    }
+  </div>
+  <div class="flex flex-column">
+    <p-avatar
+      image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      shape="circle"
+      class="text-center cursor-pointer mb-2"
+    />
+    <a
+      pTooltip="Sign out"
+      tooltipPosition="right"
+      class="p-menuitem-link bg-gray-900 hover:bg-gray-800 transition-duration-200 cursor-pointer text-center border-round-md"
+    >
+      <span
+        (click)="signOut()"
+        class="text-color px-2 py-2 text-2xl"
+        [class]="'pi pi-sign-out'"
+      ></span>
+    </a>
+  </div>
+</div>

@@ -9,7 +9,6 @@ export class AuthGuard implements CanActivate {
   appState = inject(AppStore);
 
   canActivate(): boolean {
-    console.log('canActivate: ', this.appState.user());
     if (this.appState.user.isAuthenticated?.()) {
       return true;
     } else {

@@ -13,6 +13,17 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('@client/chat').then((c) => c.ChatFeatureComponent),
       },
+      {
+        path: 'me',
+        children: [
+          {
+            path: '',
+            canActivate: [AuthGuard],
+            loadComponent: () =>
+              import('@client/profile').then((c) => c.ProfileComponent),
+          },
+        ],
+      },
     ],
   },
   {
