@@ -76,23 +76,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     Logger.log(`Message from ${client.id} to room ${roomId}: ${message}`);
 
+    const response = {
+      message,
+      senderId,
+      clientId: client.id,
+    };
     this.natsClient
       .emit(MESSAGE_PATTERN_CHAT.SEND_MESSAGE, {})
       .pipe(
         catchError((error) => {
-          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE_FAIL, {
-            message,
-            senderId,
-            clientId: client.id,
-          });
+          this.server
+            .to(roomId)
+            .emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE_FAIL, response);
           return EMPTY;
         }),
         tap((response) => {
-          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.NEW_MESSAGE, {
-            message,
-            senderId,
-            clientId: client.id,
-          });
+          this.server
+            .to(roomId)
+            .emit(SOCKET_CHAT_PATTERN.NEW_MESSAGE, response);
         })
       )
       .subscribe();
@@ -106,27 +107,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     Logger.log(
       `Interaction from ${client.id} to room ${roomId}: ${interactionKey}`
     );
+    const resposne = {
+      roomId,
+      interactionKey,
+      senderId: senderId,
+      clientId: client.id,
+    };
     this.natsClient
       .emit(MESSAGE_PATTERN_CHAT.INTERACTION, {})
       .pipe(
         catchError((error) => {
           this.server
             .to(roomId)
-            .emit(SOCKET_CHAT_PATTERN.SEND_INTERACTION_FAIL, {
-              roomId,
-              interactionKey,
-              senderId: senderId,
-              clientId: client.id,
-            });
+            .emit(SOCKET_CHAT_PATTERN.SEND_INTERACTION_FAIL, resposne);
           return EMPTY;
         }),
         tap((response) => {
-          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.NEW_INTERACTION, {
-            roomId,
-            interactionKey,
-            senderId: senderId,
-            clientId: client.id,
-          });
+          this.server
+            .to(roomId)
+            .emit(SOCKET_CHAT_PATTERN.NEW_INTERACTION, resposne);
         })
       )
       .subscribe();

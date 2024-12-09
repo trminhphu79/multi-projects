@@ -129,3 +129,75 @@ Chat Store Management: (manage just detail current conversation)
 - Destroy
     - Update all mesages to conversations message.
     - Reset all state
+
+
+
+
+
+# **Store Management for Conversations and Chat*
+## **Feature Overview**  
+- **Conversations List (Sidebar)**:  
+  - Manages the overall list of conversations and their interactions.  
+
+- **Detail Conversation (Chatting)**:  
+  - Focuses on the details of a specific conversation and its associated actions.
+
+## **Conversation Store Management**  
+Manages the overall state and interactions of all conversations.
+
+### **Socket Events**  
+1. **New Conversation Created**  
+   - When a new conversation (e.g., adding friends) is created, it is added to the top of the conversation list in the sidebar.
+2. **Incoming Messages**  
+   - If a new message is received from another user, the corresponding conversation is moved to the top of the conversation list.
+
+### **Conversation Management**  
+1. **Conversation List**  
+   - Manages the list of conversations displayed in the sidebar.  
+2. **Messages Per Conversation**  
+   - Tracks all messages associated with each conversation.
+
+### **Initialization Tasks**  
+1. **Socket Registration**  
+   - Register sockets for conversation-related actions:
+     - Connect to the socket.
+     - Initialize chat rooms for conversations.
+     - Create channels for new conversations.  
+2. **Load Data**  
+   - Fetch conversation details (Just some field: name, avatar, lastMessage, time, UnRead?)
+   - Load the 20 most recent messages for each conversation.
+
+### **Cleanup Tasks (Destroy)**  
+1. **Reset State**  
+   - Clears all stored data and resets the state.  
+2. **Socket Management**  
+   - Disconnects all channels.  
+   - Disconnects from the socket.
+
+------------------ ## CHAT STORE AREA  ## --------------------
+## **Chat Store Management**  
+Focuses on managing the details of a specific conversation.
+
+### **Actions**  
+1. **Manage Message Actions**  
+   - Handles actions like sending, replying, and deleting messages.  
+2. **Send Message**  
+   - Uses sockets to send messages in real-time if the other user is online.  
+   - Adds messages to the conversation without sending if the user is offline.
+
+### **Socket Events**  
+1. **Message Management**  
+   - Adds new incoming messages to the message list in the store.  
+2. **Update Message Interactions**  
+   - Updates message details like read receipts, reactions, or edits.
+
+### **Initialization Tasks**  
+1. **Clone Messages**  
+   - Clones all messages for the current conversation from the **Conversation Store**.
+
+### **Cleanup Tasks (Destroy)**  
+1. **Sync Messages**  
+   - Syncs the updated message list back to the **Conversation Store**.  
+2. **Reset State**  
+   - Clears all stored data and resets the state.
+
