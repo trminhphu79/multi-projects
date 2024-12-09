@@ -109,7 +109,7 @@ Conversation Store Management: (manage all conversations)
     - Messages for each conversation
     - Conversation of users - left sidebar
 - Init:
-    - Register socket for conversation's action: connect socket, init one channel-chat for conversation, channel for new conversation
+    - Register socket for conversation's action: connect socket, init chat-room for conversation, channel for new conversation
     - Load conversation detail
     - Load 20 recently messages of each conversation
 - Destroy: 
