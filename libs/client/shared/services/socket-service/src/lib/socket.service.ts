@@ -38,16 +38,19 @@ export class SocketAdapterService implements ISocketAdapter {
    * Join a room
    * @param roomId Room ID to join
    */
-  joinRoom(roomId: string): void {
-    this.socket.emit(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM, { roomId });
+  joinRoom(roomId: string, userId: number): void {
+    this.socket.emit(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM, { roomId, userId });
   }
 
   /**
    * Leave a room
    * @param roomId Room ID to leave
    */
-  leaveRoom(roomId: string): void {
-    this.socket.emit(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM, { roomId });
+  leaveRoom(roomId: string, userId: number): void {
+    this.socket.emit(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM, {
+      roomId,
+      userId,
+    });
   }
 
   /**
