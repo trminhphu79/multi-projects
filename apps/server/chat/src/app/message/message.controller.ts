@@ -8,7 +8,7 @@ import { MessageService } from './message.service';
 export class MessageController {
   constructor(private service: MessageService) {}
 
-  @MessagePattern(MESSAGE_PATTERN_CHAT.SEND)
+  @MessagePattern(MESSAGE_PATTERN_CHAT.SEND_MESSAGE)
   send(payload: SendMessageDto) {
     console.log(
       `Message received from ${payload.senderId}: ${payload.message}`

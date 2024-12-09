@@ -66,15 +66,14 @@
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
       "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
-      "@nest-monorepo/decorators": [
-        "libs/server/decorators/src/index.ts"
-      ],
+      "@nest-monorepo/decorators": ["libs/server/decorators/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
       "@nest-monorepo/message-container": [
         "libs/client/chat/ui/message-container/src/index.ts"
       ],
-      "@nest-monorepo/microservice": [
-        "libs/server/microservice/src/index.ts"
+      "@nest-monorepo/microservice": ["libs/server/microservice/src/index.ts"],
+      "@server/shared/socket-pattern": [
+        "libs/server/socket-pattern/src/index.ts"
       ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
@@ -120,9 +119,7 @@
       "@server/shared/message-pattern/chat": [
         "libs/server/message-pattern/src/lib/chat/index.ts"
       ],
-      "@server/shared/nats-client": [
-        "libs/server/nats-client/src/index.ts"
-      ]
+      "@server/shared/nats-client": ["libs/server/nats-client/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

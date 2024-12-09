@@ -84,3 +84,48 @@
     - Message type look like Chat Covnersation Between 2 members.
 - Update user profile like: avatar, bio, change password....
 
+
+
+Client 1
+-> Connect Socket -> Init covnersations (conversationId + userId, friendId) -> Created channel message
+    - receive incomming message
+        - add to msg list -> show on UI
+    - sending message
+        - add to msg list -> show on UI
+
+Client 2
+-> Connect socket -> Init conversations, if existing -> join current user to that conversation 
+    - receive incomming message
+        - add to msg list -> show on UI
+    - sending message
+        - add to msg list -> show on UI
+
+
+Conversation Store Management: (manage all conversations)
+- Socket:
+    - New conversation has been created (when add friends) => put it on top list conversation sidebar
+    - New messages of another people chat -> put that conversation to top
+- Manage many conversations:
+    - Messages for each conversation
+    - Conversation of users - left sidebar
+- Init:
+    - Register socket for conversation's action: connect socket, init one channel-chat for conversation, channel for new conversation
+    - Load conversation detail
+    - Load 20 recently messages of each conversation
+- Destroy: 
+    - Reset State
+    - Disconnect all channels,
+    - Disconnect socket
+
+
+Chat Store Management: (manage just detail current conversation)
+- Manage actions: Send, reply, delete....
+    - Send message with socket when another online, if no just add message to conversation
+- Socket:
+    - add to messages list in store
+    - update interaction of messages in store
+- Init
+    - Clone all message of this conversation from conversations store
+- Destroy
+    - Update all mesages to conversations message.
+    - Reset all state

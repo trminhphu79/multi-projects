@@ -1,38 +1,134 @@
+import { Inject, Logger } from '@nestjs/common';
 import {
   WebSocketGateway,
   WebSocketServer,
-  SubscribeMessage,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatService } from './chat.service';
-import { SendMessageDto} from '@server/shared/dtos/message';
-@WebSocketGateway({ cors: true })
+import {
+  SOCKET_CHAT_PATTERN,
+  SOCKET_CONVERSATION_PATTERN,
+} from '@server/shared/socket-pattern';
+import { ClientProxy } from '@nestjs/microservices';
+import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
+import { catchError, EMPTY, tap } from 'rxjs';
+import {
+  NewMessageDto,
+  InteractionMessageDto,
+} from '@server/shared/dtos/message';
+import { JoinRoomDto, LeaveRoomDto } from '@server/shared/dtos/conversation';
+
+@WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
-  private connectedClients: Map<string, Socket> = new Map();
-  constructor(private readonly gatewayService: ChatService) {}
+  private server: Server;
 
-  // Handle new WebSocket connections
+  constructor(
+    @Inject('NATS_SERVICE')
+    private natsClient: ClientProxy
+  ) {}
+
+  private userRooms: Map<string, string[]> = new Map();
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
-    this.connectedClients.set(client.id, client);
+    Logger.log(`Client connected: ${client.id}`);
+    this.userRooms.set(client.id, []);
   }
-  // Handle WebSocket disconnections
+
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
-    this.connectedClients.delete(client.id);
+    Logger.log(`Client disconnected: ${client.id}`);
+    this.userRooms.delete(client.id);
   }
-  // Listen for "sendMessage" events from WebSocket clients
-  @SubscribeMessage('SEND_MSG')
-  handleMessage(client: Socket, payload: SendMessageDto) {
-    console.log(`Message received from ${payload.senderId}: ${payload.message}`);
-    // Forward the message to the Chat service via NATS
-    this.gatewayService.sendMessageToChat(payload).subscribe((response) => {
-        console.log("Value received from chat service: ", response)
-      this.server.emit('NEW_MSG', response);
+
+  @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM)
+  handleJoinRoom(client: Socket, { roomId }: JoinRoomDto) {
+    Logger.log(`Client ${client.id} joining room: ${roomId}`);
+    client.join(roomId);
+
+    const rooms = this.userRooms.get(client.id) || [];
+    this.userRooms.set(client.id, [...rooms, roomId]);
+    client.to(roomId).emit(SOCKET_CONVERSATION_PATTERN.USER_JOINED, {
+      userId: client.id,
+      roomId,
     });
+  }
+
+  @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM)
+  handleLeaveRoom(client: Socket, { roomId }: LeaveRoomDto) {
+    Logger.log(`Client ${client.id} leaving room: ${roomId}`);
+    client.leave(roomId);
+    const rooms = this.userRooms.get(client.id) || [];
+    this.userRooms.set(
+      client.id,
+      rooms.filter((r) => r !== roomId)
+    );
+    client.to(roomId).emit(SOCKET_CONVERSATION_PATTERN.USER_LEFT, {
+      userId: client.id,
+      roomId,
+    });
+  }
+
+  @SubscribeMessage(SOCKET_CHAT_PATTERN.SEND_MESSAGE)
+  handleSendMessage(
+    client: Socket,
+    { roomId, message, senderId }: NewMessageDto
+  ) {
+    Logger.log(`Message from ${client.id} to room ${roomId}: ${message}`);
+
+    this.natsClient
+      .emit(MESSAGE_PATTERN_CHAT.SEND_MESSAGE, {})
+      .pipe(
+        catchError((error) => {
+          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE_FAIL, {
+            message,
+            senderId,
+            clientId: client.id,
+          });
+          return EMPTY;
+        }),
+        tap((response) => {
+          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.NEW_MESSAGE, {
+            message,
+            senderId,
+            clientId: client.id,
+          });
+        })
+      )
+      .subscribe();
+  }
+
+  @SubscribeMessage(SOCKET_CHAT_PATTERN.SEND_INTERACTION)
+  handleInteractMessage(
+    client: Socket,
+    { roomId, interactionKey, senderId }: InteractionMessageDto
+  ) {
+    Logger.log(
+      `Interaction from ${client.id} to room ${roomId}: ${interactionKey}`
+    );
+    this.natsClient
+      .emit(MESSAGE_PATTERN_CHAT.INTERACTION, {})
+      .pipe(
+        catchError((error) => {
+          this.server
+            .to(roomId)
+            .emit(SOCKET_CHAT_PATTERN.SEND_INTERACTION_FAIL, {
+              roomId,
+              interactionKey,
+              senderId: senderId,
+              clientId: client.id,
+            });
+          return EMPTY;
+        }),
+        tap((response) => {
+          this.server.to(roomId).emit(SOCKET_CHAT_PATTERN.NEW_INTERACTION, {
+            roomId,
+            interactionKey,
+            senderId: senderId,
+            clientId: client.id,
+          });
+        })
+      )
+      .subscribe();
   }
 }

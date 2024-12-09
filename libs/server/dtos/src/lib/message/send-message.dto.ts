@@ -4,3 +4,9 @@ export class SendMessageDto {
   senderId: number;
   receiverId: number;
 }
+
+export class NewMessageDto {
+  message: string;
+  roomId: string;
+  senderId: number;
+}

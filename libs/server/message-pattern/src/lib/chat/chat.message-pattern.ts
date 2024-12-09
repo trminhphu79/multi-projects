@@ -7,9 +7,11 @@ const CHAT_MODULES_NAME = Object.freeze({
 });
 
 export const MESSAGE_PATTERN_CHAT = Object.freeze({
-  SEND: `${CHAT_MODULES_NAME.CHAT}/send`,
+  SEND_MESSAGE: `${CHAT_MODULES_NAME.CHAT}/send-message`,
   DELETE: `${CHAT_MODULES_NAME.CHAT}/delete`,
   PAGING: `${CHAT_MODULES_NAME.CHAT}/paging`,
+
+  INTERACTION: `${CHAT_MODULES_NAME.CHAT}/interaction`,
 });
 
 export const MESSAGE_PATTERN_CONVERSATION = Object.freeze({
