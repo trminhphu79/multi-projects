@@ -13,7 +13,7 @@
     "run-chatapp": "docker-compose --env-file .env.production up -d",
     "rebuild-services": "nx build chat && nx build gateway && nx build auth",
     "build-run-chatapp": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env.production up --build -d",
-    "build-run-chatapp:local": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env up --build -d",
+    "build-run-chatapp:local": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env up --build",
     "build:app-chat": "nx build chat-with-me --prod"
   },
   "private": true,

@@ -67,61 +67,61 @@
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
       "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
       "@nest-monorepo/decorators": [
-        "libs/server/shared/decorators/src/index.ts"
+        "libs/server/decorators/src/index.ts"
       ],
-      "@nest-monorepo/guards": ["libs/server/shared/guards/src/index.ts"],
+      "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
       "@nest-monorepo/message-container": [
         "libs/client/chat/ui/message-container/src/index.ts"
       ],
       "@nest-monorepo/microservice": [
-        "libs/server/shared/microservice/src/index.ts"
+        "libs/server/microservice/src/index.ts"
       ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],
-      "@server/shared/configs": ["libs/server/shared/configs/src/index.ts"],
-      "@server/shared/dtos": ["libs/server/shared/dtos/src/index.ts"],
+      "@server/shared/configs": ["libs/server/configs/src/index.ts"],
+      "@server/shared/dtos": ["libs/server/dtos/src/index.ts"],
       "@server/shared/dtos/account": [
-        "libs/server/shared/dtos/src/lib/account/index.ts"
+        "libs/server/dtos/src/lib/account/index.ts"
       ],
       "@server/shared/dtos/conversation": [
-        "libs/server/shared/dtos/src/lib/conversation/index.ts"
+        "libs/server/dtos/src/lib/conversation/index.ts"
       ],
       "@server/shared/dtos/message": [
-        "libs/server/shared/dtos/src/lib/message/index.ts"
+        "libs/server/dtos/src/lib/message/index.ts"
       ],
       "@server/shared/dtos/profile": [
-        "libs/server/shared/dtos/src/lib/profile/index.ts"
+        "libs/server/dtos/src/lib/profile/index.ts"
       ],
       "@server/shared/entity/account": [
-        "libs/server/shared/entities/src/lib/account.entity.ts"
+        "libs/server/entities/src/lib/account.entity.ts"
       ],
       "@server/shared/entity/conversation": [
-        "libs/server/shared/entities/src/lib/conversation.entity.ts"
+        "libs/server/entities/src/lib/conversation.entity.ts"
       ],
       "@server/shared/entity/friend": [
-        "libs/server/shared/entities/src/lib/friend.entity.ts"
+        "libs/server/entities/src/lib/friend.entity.ts"
       ],
       "@server/shared/entity/message": [
-        "libs/server/shared/entities/src/lib/message.entity.ts"
+        "libs/server/entities/src/lib/message.entity.ts"
       ],
       "@server/shared/entity/profile": [
-        "libs/server/shared/entities/src/lib/profile.entity.ts"
+        "libs/server/entities/src/lib/profile.entity.ts"
       ],
       "@server/shared/entity/user-conversation": [
-        "libs/server/shared/entities/src/lib/user-conversation.entity.ts"
+        "libs/server/entities/src/lib/user-conversation.entity.ts"
       ],
       "@server/shared/message-pattern": [
-        "libs/server/shared/message-pattern/src/index.ts"
+        "libs/server/message-pattern/src/index.ts"
       ],
       "@server/shared/message-pattern/auth": [
-        "libs/server/shared/message-pattern/src/lib/auth/index.ts"
+        "libs/server/message-pattern/src/lib/auth/index.ts"
       ],
       "@server/shared/message-pattern/chat": [
-        "libs/server/shared/message-pattern/src/lib/chat/index.ts"
+        "libs/server/message-pattern/src/lib/chat/index.ts"
       ],
       "@server/shared/nats-client": [
-        "libs/server/shared/nats-client/src/index.ts"
+        "libs/server/nats-client/src/index.ts"
       ]
     }
   },

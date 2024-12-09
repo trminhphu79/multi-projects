@@ -1,4 +1,10 @@
-## NX Workspace - TMP ( Michael Tran)
+## Author ----- Fullstack Developer - TMP ( Michael Tran)
+- These projects build serve for practice of learning path becomes to Fullstack Developer 
+    - Stacks:
+        Front-end: Typescript, Angular 18, PrimeNg
+        Backend: NodeJs, NestJs, TypeORM, Microservice, JWT, OAuth, Real-time SocketIo
+        Database: PostgresSQL, Redis
+        Tools: Nx - Monorepo, Git, Docker
 
 ## Structure
 
@@ -41,3 +47,40 @@
             └── utils                 <-- optional grouping folder (dir), usually validation logic or shared utilities
                 ├── util1             <-- lib
                 └── util2             <-- lib
+```
+
+## FEATURES
+- Sign In/ Sign Up
+- Add friend
+- Chat
+
+## FUTURE FEATURES
+- Group Conversation
+- Multiple message type
+- Notification
+- Message interation
+
+## ENHANCEMENT - DOCUMENTS
+- Notification
+    - Add friend
+        - Need implement redis cache to know how many user is connecting to socket ( online )
+    - Show new message alert when user in current conversation, just show alert -> user click -> scrolling to new message (bottom)
+- Conversation
+    - Load conversation filter by updated time 
+    - Filter conversation Unread/Read
+    - Remove conversation (Remove all messages related to this one)
+    - Last message/interaction time/ status of last message for conversation
+    - Animation typing... when user type the message
+    - User online status
+- Upgrade Message Conversation
+    - This feature need to make ui beautifully for each type of message
+    - Send multiple message type: Code type, image, voice, url, 
+    - Apply Reaction Icon for conversation
+- Multiple profile on a account, they can switch between them
+- Channel/Group conversation for everyone 
+    - Owner
+    - Members
+    - Permissions
+    - Message type look like Chat Covnersation Between 2 members.
+- Update user profile like: avatar, bio, change password....
+

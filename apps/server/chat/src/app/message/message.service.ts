@@ -45,7 +45,7 @@ export class MessageService {
       include: [
         {
           model: Profile,
-          as: 'users',
+          as: 'members',
           where: {
             id: [senderId, receiverId],
           },
@@ -66,7 +66,7 @@ export class MessageService {
         name: `Conversation between ${senderId} and ${receiverId}`,
       });
 
-      // Associate both users with the conversation
+      // Associate both members with the conversation
       await existingConversation.$set('members', [senderId, receiverId]);
     } else {
       existingConversation = conversation;
@@ -77,7 +77,7 @@ export class MessageService {
       senderId,
       receiverId,
       conversationId: existingConversation.id,
-      message,
+      content: message,
     });
 
     console.log('newMessage: ', newMessage);
@@ -90,7 +90,7 @@ export class MessageService {
     return await this.conversationModel.findAll({
       include: [
         {
-          association: 'users', // Association defined in the Conversation model
+          association: 'members', // Association defined in the Conversation model
           where: { id: profileId },
           through: { attributes: [] }, // Exclude join table attributes
         },

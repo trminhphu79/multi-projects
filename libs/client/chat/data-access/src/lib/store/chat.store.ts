@@ -64,6 +64,6 @@ function mapingMessage(newMessage: any, currentId: number): Partial<Message> {
     ...newMessage,
     isSender: newMessage.senderId == currentId,
     isReceiver: newMessage.senderId == currentId,
-    content: newMessage.message,
+    content: newMessage.content,
   };
 }

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -10,6 +11,7 @@ import {
   AddFriendDto,
 } from '@server/shared/dtos/profile';
 import { Profile } from '@server/shared/entity/profile';
+import { Conversation } from '@server/shared/entity/conversation';
 import { from, map } from 'rxjs';
 import { Op } from 'sequelize';
 
@@ -17,7 +19,9 @@ import { Op } from 'sequelize';
 export class ProfileService {
   constructor(
     @InjectModel(Profile)
-    private model: typeof Profile
+    private model: typeof Profile,
+    @InjectModel(Conversation)
+    private conversationModel: typeof Conversation
   ) {}
 
   updateOne(payload: UpdateProfileDto) {
@@ -31,21 +35,17 @@ export class ProfileService {
   async addFriend(payload: AddFriendDto) {
     const { profileId, friendId } = payload;
 
-    // Check if profile exists
     const profile = await this.model.findByPk(profileId, {
-      include: { model: this.model, as: 'friends' }, // Include existing friends
+      include: { model: this.model, as: 'friends' },
     });
     if (!profile) {
       throw new NotFoundException(`Profile with id ${profileId} not found`);
     }
-
-    // Check if friend exists
     const friend = await this.model.findByPk(friendId);
     if (!friend) {
       throw new NotFoundException(`Profile with id ${friendId} not found`);
     }
 
-    // Check if the friend relationship already exists
     const isAlreadyFriend = profile.friends.some(
       (existingFriend) => existingFriend.id === friendId
     );
@@ -55,8 +55,21 @@ export class ProfileService {
       );
     }
 
-    // Add friend if not already a friend
-    return profile.$add('friends', friend);
+    Logger.log("Add friend " + friend.fullName + " successfully!");
+
+    await profile.$add('friends', friend);
+
+    const createdConversation = await this.conversationModel.create({
+      name: `Conversation between ${profileId} and ${friendId}`,
+    });
+
+    await createdConversation.$set('members', [profileId, friendId]);
+    Logger.log("Create conversation between " + profile.fullName + " and "  + friend.fullName + " successfully!");
+
+    return {
+      data: friend,
+      message: 'Add friend successfully!',
+    };
   }
 
   searchFriend(payload: SearchFriendDto) {
