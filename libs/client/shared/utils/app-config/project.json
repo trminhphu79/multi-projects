@@ -1,7 +1,7 @@
 {
-  "name": "socket-service",
+  "name": "client-app-config",
   "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/client/shared/services/socket-service/src",
+  "sourceRoot": "libs/client/shared/utils/app-config/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],

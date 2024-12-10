@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable, Subject } from 'rxjs';
 import {
@@ -6,20 +6,19 @@ import {
   SOCKET_CONVERSATION_PATTERN,
 } from '@server/shared/socket-pattern';
 import { ISocketAdapter } from './socket.model';
-// import { ENV_CONFIG, EnvironmentConfig } from './env-config'; // Inject environment configs
+import { AppConfig, injectAppConfig } from '@client/utils/app-config';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SocketAdapterService implements ISocketAdapter {
   private socket!: Socket;
+  private appConfig: AppConfig = injectAppConfig()
 
   /**
    * Connect to the socket server
    */
   connect(): void {
     if (!this.socket || !this.socket.connected) {
-      this.socket = io('http://localhost:3000/', { transports: ['websocket'] });
+      this.socket = io(this.appConfig.socketUrl, { transports: ['websocket'] });
       console.log('Socket connected');
     }
   }

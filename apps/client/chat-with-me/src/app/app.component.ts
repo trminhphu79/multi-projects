@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { injectAppState } from '@client/store/token';
+import { injectAppConfig } from '@client/utils/app-config';
+import { injectSocket } from '@client/utils/socket';
 
 @Component({
   standalone: true,
@@ -10,4 +13,11 @@ import { RouterModule } from '@angular/router';
 })
 export class AppComponent {
   title = 'Chat with me';
+  socket = injectSocket();
+  appConfig = injectAppConfig();
+  appState = injectAppState();
+
+  constructor() {
+    console.log('AppComponent...', this);
+  }
 }

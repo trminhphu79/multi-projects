@@ -1,8 +1,5 @@
-import { InjectionToken } from '@angular/core';
-import { INITIAL_APP_STATE } from './state';
 import { AppState } from './model';
+import { createInjectionToken } from '@client/utils/di';
 
-export const APP_STATE = new InjectionToken<AppState>('AppState', {
-  factory: () => INITIAL_APP_STATE,
-  providedIn: 'root',
-});
+export const [injectAppState, provideAppState] =
+  createInjectionToken<AppState>('APP_STATE');

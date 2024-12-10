@@ -19,7 +19,7 @@ import {
   UserSignInPayload,
   UserSignUpPayload,
 } from '@client/user/data-access/model';
-import { ToastService } from '@client/util/toast';
+import { ToastService } from '@client/utils/toast';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from '@client/profile/service';
 @Component({

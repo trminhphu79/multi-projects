@@ -4,16 +4,14 @@ import {
   signalStore,
   withState,
   patchState,
-  withComputed,
 } from '@ngrx/signals';
 import { INITIAL_APP_STATE } from './state';
 import { AppState, UserState } from './model';
-import { inject } from '@angular/core';
-import { APP_STATE } from './token';
+import { injectAppState } from './token';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
-  withState(() => inject(APP_STATE)),
+  withState(() => injectAppState()),
   withMethods((store) => ({
     setState(newState: AppState) {
       patchState(store, { ...newState });

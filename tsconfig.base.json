@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@client/environment": ["apps/client/chat-with-me/src/environments/environment.ts"],
       "@client/app-shell": ["libs/client/app-shell/feature/src/index.ts"],
       "@client/app-shell/add-friend-dialog": [
         "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
@@ -49,9 +50,7 @@
       "@client/provider/app-state": [
         "libs/client/shared/provider/app-state/src/index.ts"
       ],
-      "@client/provider/socket": [
-        "libs/client/shared/provider/socket/src/index.ts"
-      ],
+    
       "@client/store/model": ["libs/client/shared/store/src/lib/model.ts"],
       "@client/store/state": ["libs/client/shared/store/src/lib/state.ts"],
       "@client/store/store": ["libs/client/shared/store/src/lib/store.ts"],
@@ -65,16 +64,20 @@
       ],
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
-      "@client/util/toast": ["libs/client/shared/util/toast/src/index.ts"],
+      "@client/utils/socket": ["libs/client/shared/utils/socket-service/src/index.ts"],
+      "@client/utils/toast": ["libs/client/shared/utils/toast/src/index.ts"],
+      "@client/utils/app-config": [
+        "libs/client/shared/utils/app-config/src/index.ts"
+      ],
       "@nest-monorepo/decorators": ["libs/server/decorators/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
+      "@client/utils/di": [
+        "libs/client/shared/utils/injection-token/src/index.ts"
+      ],
       "@nest-monorepo/message-container": [
         "libs/client/chat/ui/message-container/src/index.ts"
       ],
       "@nest-monorepo/microservice": ["libs/server/microservice/src/index.ts"],
-      "@client/shared/socket-adaper": [
-        "libs/client/shared/services/socket-service/src/index.ts"
-      ],
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],

@@ -22,10 +22,7 @@
             "input": "apps/client/chat-with-me/public"
           }
         ],
-        "styles": [
-          "apps/client/chat-with-me/src/styles.scss"
-         
-        ],
+        "styles": ["apps/client/chat-with-me/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -42,12 +39,24 @@
               "maximumError": "4kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/client/chat-with-me/src/environments/environment.ts",
+              "with": "apps/client/chat-with-me/src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/client/chat-with-me/src/environments/environment.ts",
+              "with": "apps/client/chat-with-me/src/environments/environment.dev.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"

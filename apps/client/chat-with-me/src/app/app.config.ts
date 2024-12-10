@@ -6,27 +6,23 @@ import {
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { appRoutes } from '@client/app-shell';
-import { provideSocketIo } from '@client/provider/socket';
-import { providerAppState } from '@client/provider/app-state';
 import { INITIAL_APP_STATE } from './app.state';
 import { provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import {
-  SOCKET_ADAPTER,
-  SocketAdapterService,
-} from '@client/shared/socket-adaper';
+import { provideSocketAdapter } from '@client/utils/socket';
+import { provideAppState } from '@client/store/token';
+import { provideAppConfig } from '@client/utils/app-config';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
-    providerAppState(INITIAL_APP_STATE),
+    provideAppState(INITIAL_APP_STATE),
+    provideAppConfig(environment),
+    provideSocketAdapter(),
     provideAnimations(),
-    importProvidersFrom(provideSocketIo(), MessageService),
+    importProvidersFrom(MessageService),
     provideRouter(appRoutes, withViewTransitions()),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    {
-      provide: SOCKET_ADAPTER,
-      useClass: SocketAdapterService,
-    },
   ],
 };
