@@ -32,18 +32,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private userRooms: Map<string, string[]> = new Map();
   handleConnection(client: Socket) {
-    Logger.log(`Client connected: ${client.id}`);
+    Logger.log(`Socket --- Client connected: ${client.id}`);
     this.userRooms.set(client.id, []);
   }
 
   handleDisconnect(client: Socket) {
-    Logger.log(`Client disconnected: ${client.id}`);
+    Logger.log(`Socket --- Client disconnected: ${client.id}`);
     this.userRooms.delete(client.id);
   }
 
   @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM)
   handleJoinRoom(client: Socket, { roomId }: JoinRoomDto) {
-    Logger.log(`Client ${client.id} joining room: ${roomId}`);
+    Logger.log(`Socket --- Client ${client.id} joining room: ${roomId}`);
     client.join(roomId);
 
     const rooms = this.userRooms.get(client.id) || [];
@@ -56,7 +56,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM)
   handleLeaveRoom(client: Socket, { roomId }: LeaveRoomDto) {
-    Logger.log(`Client ${client.id} leaving room: ${roomId}`);
+    Logger.log(`Socket --- Client ${client.id} leaving room: ${roomId}`);
     client.leave(roomId);
     const rooms = this.userRooms.get(client.id) || [];
     this.userRooms.set(
@@ -74,7 +74,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client: Socket,
     { roomId, message, senderId }: NewMessageDto
   ) {
-    Logger.log(`Message from ${client.id} to room ${roomId}: ${message}`);
+    Logger.log(`Socket --- Message from ${client.id} to room ${roomId}: ${message}`);
 
     const response = {
       message,
@@ -105,7 +105,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     { roomId, interactionKey, senderId }: InteractionMessageDto
   ) {
     Logger.log(
-      `Interaction from ${client.id} to room ${roomId}: ${interactionKey}`
+      `Socket --- Interaction from ${client.id} to room ${roomId}: ${interactionKey}`
     );
     const resposne = {
       roomId,
