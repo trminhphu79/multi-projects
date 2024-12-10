@@ -12,7 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Conversation, Messages } from '@client/chat/model';
+import { Conversation, Message } from '@client/chat/model';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { AvatarModule } from 'primeng/avatar';
@@ -47,7 +47,7 @@ import {
   styleUrl: './chatting.component.scss',
 })
 export class ChattingComponent implements AfterViewInit {
-  messages = input<Messages>([]);
+  messages = input<Message[]>([]);
   sender = input<Conversation | null>();
 
   sendMessage = output<string>();

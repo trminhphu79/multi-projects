@@ -1,4 +1,4 @@
-import { inject, Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable, Subject } from 'rxjs';
 import {
@@ -11,7 +11,7 @@ import { AppConfig, injectAppConfig } from '@client/utils/app-config';
 @Injectable()
 export class SocketAdapterService implements ISocketAdapter {
   private socket!: Socket;
-  private appConfig: AppConfig = injectAppConfig()
+  private appConfig: AppConfig = injectAppConfig();
 
   /**
    * Connect to the socket server

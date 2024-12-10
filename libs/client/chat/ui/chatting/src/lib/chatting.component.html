@@ -4,13 +4,15 @@
   >
     <section class="w-full column-gap-3 flex">
       <p-avatar
-        [image]="sender()?.avatarUrl"
+        [image]="sender()?.thumbnailUrl"
         size="large"
         shape="circle"
       ></p-avatar>
       <section class="w-full flex flex-column">
-        <span class="mb-1">{{ sender()?.sender }}</span>
-        <div class="text-xs text-color">{{ sender()?.time }}</div>
+        <span class="mb-1">{{ sender()?.lastMessage?.senderName }}</span>
+        <div class="text-xs text-color">
+          {{ sender()?.lastMessage?.timeSend }}
+        </div>
       </section>
     </section>
     <section class="ml-auto h-full flex align-items-center">

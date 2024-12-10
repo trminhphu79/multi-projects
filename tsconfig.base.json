@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@client/environment": ["apps/client/chat-with-me/src/environments/environment.ts"],
+      "@client/environment": [
+        "apps/client/chat-with-me/src/environments/environment.ts"
+      ],
       "@client/app-shell": ["libs/client/app-shell/feature/src/index.ts"],
       "@client/app-shell/add-friend-dialog": [
         "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
@@ -28,6 +30,9 @@
       "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
       "@client/chat/model": [
         "libs/client/chat/data-access/src/lib/model/index.ts"
+      ],
+      "@client/chat/enum": [
+        "libs/client/chat/data-access/src/lib/enum/index.ts"
       ],
       "@client/chat/store": [
         "libs/client/chat/data-access/src/lib/store/index.ts"
@@ -50,7 +55,7 @@
       "@client/provider/app-state": [
         "libs/client/shared/provider/app-state/src/index.ts"
       ],
-    
+
       "@client/store/model": ["libs/client/shared/store/src/lib/model.ts"],
       "@client/store/state": ["libs/client/shared/store/src/lib/state.ts"],
       "@client/store/store": ["libs/client/shared/store/src/lib/store.ts"],
@@ -64,7 +69,9 @@
       ],
       "@client/user/register": ["libs/client/user/ui/register/src/index.ts"],
       "@client/user/sign-in": ["libs/client/user/ui/sign-in/src/index.ts"],
-      "@client/utils/socket": ["libs/client/shared/utils/socket-service/src/index.ts"],
+      "@client/utils/socket": [
+        "libs/client/shared/utils/socket-service/src/index.ts"
+      ],
       "@client/utils/toast": ["libs/client/shared/utils/toast/src/index.ts"],
       "@client/utils/app-config": [
         "libs/client/shared/utils/app-config/src/index.ts"

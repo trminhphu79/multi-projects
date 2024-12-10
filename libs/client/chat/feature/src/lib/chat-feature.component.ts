@@ -17,7 +17,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { ConversationComponent } from '@client/chat/conversation';
 import { ChattingComponent } from '@client/chat/chatting';
 import { Conversation, MessageCategory } from '@client/chat/model';
-import { ChatStore } from '@client/chat/store';
+import { ChatStore } from 'libs/client/chat/data-access/src/lib/store/chat';
 
 @Component({
   selector: 'lib-chat-feature',
@@ -72,155 +72,6 @@ export class ChatFeatureComponent {
       selected: false,
     },
   ]);
-  // conversations = signal<Conversation[]>([
-  //   {
-  //     sender: 'Trần Minh Phú',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //     avatarUrl:
-  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //     avatarUrl:
-  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //     avatarUrl:
-  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     avatarUrl:
-  //       'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Nguyễn Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn A',
-  //     lassMessage: 'Có đó không?',
-  //     unread: false,
-  //     time: '2 mins ago',
-  //   },
-  //   {
-  //     sender: 'Trần Văn B',
-  //     lassMessage: 'Có đó không?',
-  //     unread: true,
-  //     time: '2 mins ago',
-  //   },
-  // ]);
-
   user = this.appState.user;
 
   senderAvatar = signal(
@@ -257,7 +108,7 @@ export class ChatFeatureComponent {
     console.log('onSendMessage: ', message);
     this.chatStore.sendMessage({
       senderId: this.appState.user().profile?.id as number,
-      receiverId: this.conversation()?.profileId as number,
+      receiverId: this.conversation()?.members[0].id as number,
       message,
     });
   }

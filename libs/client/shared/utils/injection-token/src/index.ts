@@ -15,7 +15,7 @@ export interface InjectFn<T> {
 export interface ProvideFn<T> {
   (value: T): Provider;
   (
-    value: T | Array<Type<any>>,
+    value: Array<Type<any>>,
     options: {
       factory?: (...args: any[]) => T;
       useClass?: Type<T>;
@@ -77,5 +77,5 @@ export function createInjectionToken<T>(
   function injectFn(options: InjectOptions = {}) {
     return inject(token, options);
   }
-  return [injectFn as InjectFn<T>, provideFn(token), token];
+  return [injectFn as InjectFn<T>, provideFn<T>(token), token];
 }

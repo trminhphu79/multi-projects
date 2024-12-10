@@ -12,7 +12,6 @@ import { injectSocket } from '@client/utils/socket';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'Chat with me';
   socket = injectSocket();
   appConfig = injectAppConfig();
   appState = injectAppState();

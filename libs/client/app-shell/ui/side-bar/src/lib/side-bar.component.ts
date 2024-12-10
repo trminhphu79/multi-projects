@@ -1,5 +1,5 @@
 import { ToastModule } from 'primeng/toast';
-import { Message, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { ToastService } from '@client/utils/toast';
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
