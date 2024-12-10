@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@angular/core';
 import { UserSignInPayload, UserSignUpPayload } from './user.model';
 import { of } from 'rxjs';
 

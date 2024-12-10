@@ -1,28 +1,28 @@
 {
   "name": "chat-with-me",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/client/chat-with-me/src",
+  "sourceRoot": "apps/web-chat/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/client/chat-with-me",
-        "index": "apps/client/chat-with-me/src/index.html",
-        "browser": "apps/client/chat-with-me/src/main.ts",
+        "outputPath": "dist/apps/web-chat",
+        "index": "apps/web-chat/src/index.html",
+        "browser": "apps/web-chat/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/client/chat-with-me/tsconfig.app.json",
+        "tsConfig": "apps/web-chat/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/client/chat-with-me/public"
+            "input": "apps/web-chat/public"
           }
         ],
-        "styles": ["apps/client/chat-with-me/src/styles.scss"],
+        "styles": ["apps/web-chat/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -30,20 +30,20 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "40kb"
             }
           ],
           "outputHashing": "all",
           "fileReplacements": [
             {
-              "replace": "apps/client/chat-with-me/src/environments/environment.ts",
-              "with": "apps/client/chat-with-me/src/environments/environment.prod.ts"
+              "replace": "apps/web-chat/src/environments/environment.ts",
+              "with": "apps/web-chat/src/environments/environment.prod.ts"
             }
           ]
         },
@@ -53,8 +53,8 @@
           "sourceMap": true,
           "fileReplacements": [
             {
-              "replace": "apps/client/chat-with-me/src/environments/environment.ts",
-              "with": "apps/client/chat-with-me/src/environments/environment.dev.ts"
+              "replace": "apps/web-chat/src/environments/environment.ts",
+              "with": "apps/web-chat/src/environments/environment.dev.ts"
             }
           ]
         }
@@ -86,7 +86,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "chat-with-me:build",
-        "staticFilePath": "dist/apps/client/chat-with-me/browser",
+        "staticFilePath": "dist/apps/web-chat/browser",
         "spa": true
       }
     }
