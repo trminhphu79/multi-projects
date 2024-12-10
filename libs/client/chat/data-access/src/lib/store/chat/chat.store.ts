@@ -1,3 +1,4 @@
+import { injectSocket } from '@client/utils/socket';
 import { AppStore } from '@client/store/store';
 import { withHooks, withMethods, signalStore, withState } from '@ngrx/signals';
 import { INITIAL_CHAT_STATE } from './chat.state';
@@ -41,6 +42,7 @@ export const ChatStore = signalStore(
       // store.disconnectSocket();
     },
     onInit(store) {
+      console.log("socketService:", )
       // store.registerInCommingMessage();
     },
   })

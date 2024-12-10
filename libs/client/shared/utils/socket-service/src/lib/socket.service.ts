@@ -13,13 +13,23 @@ export class SocketAdapterService implements ISocketAdapter {
   private socket!: Socket;
   private appConfig: AppConfig = injectAppConfig();
 
+  private clientId!: string;
+
   /**
    * Connect to the socket server
    */
   connect(): void {
     if (!this.socket || !this.socket.connected) {
       this.socket = io(this.appConfig.socketUrl, { transports: ['websocket'] });
-      console.log('Socket connected');
+      this.socket.on('connect', () => {
+        this.clientId = this.socket.id as string;
+        console.log('Connect socket success: ', this.clientId);
+      });
+
+      this.socket.on('disconnect', () => {
+        console.log('Socket disconnected: ', this.clientId);
+        this.clientId = '';
+      });
     }
   }
 
@@ -29,7 +39,6 @@ export class SocketAdapterService implements ISocketAdapter {
   disconnect(): void {
     if (this.socket && this.socket.connected) {
       this.socket.disconnect();
-      console.log('Socket disconnected');
     }
   }
 

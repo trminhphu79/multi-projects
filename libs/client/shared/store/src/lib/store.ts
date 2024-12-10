@@ -8,11 +8,12 @@ import {
 import { INITIAL_APP_STATE } from './state';
 import { AppState, UserState } from './model';
 import { injectAppState } from './token';
+import { injectSocket } from '@client/utils/socket';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
   withState(() => injectAppState()),
-  withMethods((store) => ({
+  withMethods((store, socket = injectSocket()) => ({
     setState(newState: AppState) {
       patchState(store, { ...newState });
     },
@@ -23,11 +24,13 @@ export const AppStore = signalStore(
           ...data,
         },
       });
+      socket.connect();
     },
     resetState() {
       patchState(store, INITIAL_APP_STATE);
     },
     signOut() {
+      socket.disconnect();
       patchState(store, {
         user: {
           isAuthenticated: false,

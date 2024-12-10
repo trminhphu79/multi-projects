@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { injectAppState } from '@client/store/token';
-import { injectAppConfig } from '@client/utils/app-config';
-import { injectSocket } from '@client/utils/socket';
 
 @Component({
   standalone: true,
@@ -12,11 +9,4 @@ import { injectSocket } from '@client/utils/socket';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  socket = injectSocket();
-  appConfig = injectAppConfig();
-  appState = injectAppState();
-
-  constructor() {
-    console.log('AppComponent...', this);
-  }
 }

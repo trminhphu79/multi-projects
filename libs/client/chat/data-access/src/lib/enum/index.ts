@@ -10,3 +10,11 @@ export enum ConversationStatus {
   Idle = 'IDLE',
   NewConversationComming = 'NEW_CONVERSATION_COMMING',
 }
+
+export enum MessageEnum {
+    Personal = 'Personal',
+    System = 'System',
+    SystemInvitation = 'SystemInvitation',
+  }
+  
+  
