@@ -25,6 +25,9 @@
         "libs/client/chat/ui/conversation/src/index.ts"
       ],
       "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
+      "@client/chat/data-access/conversation": [
+      "libs/client/chat/data-access/src/lib/store/conversation/index.ts"
+      ],
       "@client/chat/enum": [
         "libs/client/chat/data-access/src/lib/enum/index.ts"
       ],
@@ -34,9 +37,7 @@
       "@client/chat/store": [
         "libs/client/chat/data-access/src/lib/store/index.ts"
       ],
-      "@client/environment": [
-        "apps/web-chat/src/environments/environment.ts"
-      ],
+      "@client/environment": ["apps/web-chat/src/environments/environment.ts"],
       "@client/guard/auth": ["libs/client/shared/guard/src/lib/auth.guard.ts"],
       "@client/layout": ["libs/client/app-shell/ui/layout/src/index.ts"],
       "@client/layout/side-bar": [

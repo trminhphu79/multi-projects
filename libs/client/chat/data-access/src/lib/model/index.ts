@@ -12,11 +12,10 @@ export type Conversation = {
   lastMessage: {
     content: string;
     timeSend: string;
-    senderName: string;
-    senderAvatar: string;
+    fullName: string;
+    avatarUrl: string;
   };
   members: Array<Member>;
-  thumbnailUrl: string;
 };
 
 export type Message = {

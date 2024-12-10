@@ -1,3 +1,4 @@
+import { ConversationStore } from '@client/chat/data-access/conversation';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   Component,
@@ -32,7 +33,7 @@ import { ChatStore } from 'libs/client/chat/data-access/src/lib/store/chat';
     ReactiveFormsModule,
     ConversationComponent,
   ],
-  providers: [ChatStore],
+  providers: [ChatStore, ConversationStore],
   templateUrl: './chat-feature.component.html',
   styleUrl: './chat-feature.component.css',
 })
@@ -43,21 +44,25 @@ export class ChatFeatureComponent {
   appState = inject(AppStore);
   conversation = signal<Conversation | null>(null);
   chatStore = inject(ChatStore);
+  conversationStore = inject(ConversationStore);
   messages = this.chatStore.messages;
 
-  conversations = computed(() => {
-    return this.appState.user().profile?.friends?.map((profile: any) => {
-      return {
-        ...profile,
-        sender: profile.fullName as string,
-        lastMessage: '...',
-        unread: true,
-        time: '2 mins ago',
-        avatarUrl: profile.avatarUrl,
-        profileId: profile.id,
-      };
-    }) as any[];
-  });
+  conversations = this.conversationStore.conversations;
+
+  // conversations = computed(() => {
+  //   return this.appState.user().profile?.friends?.map((profile: any) => {
+  //     return {
+  //       ...profile,
+  //       sender: profile.fullName as string,
+  //       lastMessage: '...',
+  //       unread: true,
+  //       time: '2 mins ago',
+  //       avatarUrl: profile.avatarUrl,
+  //       profileId: profile.id,
+  //     };
+  //   }) as any[];
+  // });
+
   messageCategories = signal<MessageCategory[]>([
     {
       label: 'All',

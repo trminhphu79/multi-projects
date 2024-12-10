@@ -1,6 +1,6 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, input, OnInit, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MessageCategory, Conversation } from '@client/chat/model';
 import { ChipModule } from 'primeng/chip';
 import { CardModule } from 'primeng/card';
@@ -18,6 +18,7 @@ import {
   selector: 'lib-conversation',
   standalone: true,
   imports: [
+    DatePipe,
     ChipModule,
     CardModule,
     CommonModule,
@@ -43,12 +44,12 @@ export class ConversationComponent implements OnInit {
   protected selectedConversation = signal<{
     value: Conversation | null;
     index: number;
-  } | null>({ value: null, index: 0 });
+  } | null>({ value: null, index: -1 });
 
   protected selectedMessageCategory = signal<{
     value: MessageCategory | null;
     index: number;
-  } | null>({ value: null, index: 0 });
+  } | null>({ value: null, index: -1 });
 
   ngOnInit() {
     this.registerValueChanges();
@@ -70,6 +71,7 @@ export class ConversationComponent implements OnInit {
   }
 
   protected onSelectConversation(item: Conversation, index: number) {
+    console.log("onSelectConversation: ", item);
     if (index == this.selectedConversation()?.index) return;
     this.selectedConversation.set({ value: item, index });
     this.selectConversationChanges.emit(item);

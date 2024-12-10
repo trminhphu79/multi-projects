@@ -16,7 +16,8 @@
     "build-run-chatapp:local": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env up --build",
     "build:app-chat": "nx build chat-with-me --prod",
     "postinstall": "electron-builder install-app-deps && electron-builder install-app-deps && electron-builder install-app-deps && electron-builder install-app-deps && electron-builder install-app-deps",
-    "serve:desktop-chat":"nx build chat-with-me && cp -R dist/apps/web-chat/browser/*  apps/desktop-chat/dist/ && cd apps/desktop-chat && npm run start"
+    "serve:desktop-chat": "nx build chat-with-me && [ -d apps/desktop-chat/dist ] || mkdir -p apps/desktop-chat/dist && cp -R dist/apps/web-chat/browser/* apps/desktop-chat/dist/ && cd apps/desktop-chat && npm run start",
+    "build-prod:desktop-chat": "nx build chat-with-me && [ -d apps/desktop-chat/dist ] || mkdir -p apps/desktop-chat/dist && cp -R dist/apps/web-chat/browser/* apps/desktop-chat/dist/ && cd apps/desktop-chat && npm run start"
   },
   "private": true,
   "dependencies": {

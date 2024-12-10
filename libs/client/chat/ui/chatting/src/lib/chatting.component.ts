@@ -11,7 +11,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Conversation, Message } from '@client/chat/model';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -35,6 +35,7 @@ import {
   selector: 'lib-chatting',
   standalone: true,
   imports: [
+    DatePipe,
     CardModule,
     CommonModule,
     AvatarModule,
@@ -113,7 +114,7 @@ export class ChattingComponent implements AfterViewInit {
         filter((e: any) => e.keyCode === 13),
         distinctUntilChanged(),
         tap((res) => {
-          console.log("Chatting: ", res);
+          console.log('Chatting: ', res);
           this.sendMessage.emit(res?.target?.value);
         })
       )

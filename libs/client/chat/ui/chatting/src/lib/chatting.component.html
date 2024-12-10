@@ -4,14 +4,14 @@
   >
     <section class="w-full column-gap-3 flex">
       <p-avatar
-        [image]="sender()?.thumbnailUrl"
+        [image]="sender()?.lastMessage?.avatarUrl"
         size="large"
         shape="circle"
       ></p-avatar>
       <section class="w-full flex flex-column">
-        <span class="mb-1">{{ sender()?.lastMessage?.senderName }}</span>
+        <span class="mb-1">{{ sender()?.lastMessage?.fullName }}</span>
         <div class="text-xs text-color">
-          {{ sender()?.lastMessage?.timeSend }}
+          {{ sender()?.lastMessage?.timeSend | date : 'medium' }}
         </div>
       </section>
     </section>
