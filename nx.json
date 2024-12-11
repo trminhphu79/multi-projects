@@ -64,12 +64,14 @@
       "unitTestRunner": "none"
     },
     "@nx/angular:component": {
-      "style": "scss"
+      "style": "scss",
+      "prefix": "cwm"
     },
     "@nx/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "none",
-      "style": "scss"
+      "style": "scss",
+      "prefix": "cwm"
     }
   },
   "defaultProject": "chat-desktop"

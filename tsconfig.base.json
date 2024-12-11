@@ -19,10 +19,11 @@
       "@client/app-shell/add-friend-dialog": [
         "libs/client/app-shell/ui/add-friend-dialog/src/index.ts"
       ],
-      "@client/chat": ["libs/client/chat/feature/src/index.ts"],
-      "@client/chat/chatting": ["libs/client/chat/ui/chatting/src/index.ts"],
+      "@client/chat/chatting-screen": [
+        "libs/client/chat/feature/chatting-screen/src/index.ts"
+      ],
       "@client/chat/conversation": [
-        "libs/client/chat/ui/conversation/src/index.ts"
+        "libs/client/chat/feature/conversation/src/index.ts"
       ],
       "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
       "@client/chat/data-access/conversation": [
@@ -30,6 +31,15 @@
       ],
       "@client/chat/enum": [
         "libs/client/chat/data-access/src/lib/enum/index.ts"
+      ],
+      "@client/chat/ui/conversation-header": [
+        "libs/client/chat/ui/conversation-header/src/index.ts"
+      ],
+      "@client/chat/ui/conversation-list": [
+        "libs/client/chat/ui/conversation-list/src/index.ts"
+      ],
+      "@client/chat/message-screen": [
+        "libs/client/chat/feature/message-screen/src/index.ts"
       ],
       "@client/chat/model": [
         "libs/client/chat/data-access/src/lib/model/index.ts"
@@ -46,6 +56,9 @@
       "@client/page-not-found": [
         "libs/client/shared/ui/page-not-found/src/index.ts"
       ],
+      "@client/pipes/time-ago": [
+        "libs/client/shared/pipes/time-ago/src/index.ts"
+      ],
       "@client/profile": ["libs/client/profile/feature/src/index.ts"],
       "@client/profile/model": [
         "libs/client/profile/data-access/src/lib/profile.model.ts"
@@ -56,6 +69,7 @@
       "@client/provider/app-state": [
         "libs/client/shared/provider/app-state/src/index.ts"
       ],
+      "@client/store/enum": ["libs/client/shared/store/src/lib/enum.ts"],
       "@client/store/model": ["libs/client/shared/store/src/lib/model.ts"],
       "@client/store/state": ["libs/client/shared/store/src/lib/state.ts"],
       "@client/store/store": ["libs/client/shared/store/src/lib/store.ts"],
@@ -79,18 +93,19 @@
         "libs/client/shared/utils/socket-service/src/index.ts"
       ],
       "@client/utils/toast": ["libs/client/shared/utils/toast/src/index.ts"],
-      "@client/pipes/time-ago": [
-        "libs/client/shared/pipes/time-ago/src/index.ts"
+      "@nest-monorepo/chating-screen": [
+        "libs/client/chat/feature/chating-screen/src/index.ts"
       ],
-
+      "@nest-monorepo/chatting-detail": [
+        "libs/client/chat/ui/chatting-detail/src/index.ts"
+      ],
 
       "@nest-monorepo/decorators": ["libs/server/decorators/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
-      "@nest-monorepo/message-container": [
-        "libs/client/chat/ui/message-container/src/index.ts"
+      "@nest-monorepo/message-list": [
+        "libs/client/chat/ui/message-list/src/index.ts"
       ],
       "@nest-monorepo/microservice": ["libs/server/microservice/src/index.ts"],
-    
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],
@@ -136,9 +151,12 @@
         "libs/server/message-pattern/src/lib/chat/index.ts"
       ],
       "@server/shared/nats-client": ["libs/server/nats-client/src/index.ts"],
-      "@server/shared/socket-pattern": [
-        "libs/server/socket-pattern/src/index.ts"
-      ]
+      "@shared/enums": ["libs/shared/enums/src/index.ts"],
+      "@shared/models/conversation": [
+        "libs/shared/models/src/lib/conversation.ts"
+      ],
+      "@shared/models/message": ["libs/shared/models/src/lib/message.ts"],
+      "@shared/socket-pattern": ["libs/shared/socket-pattern/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -11,7 +11,9 @@ export const appRoutes: Route[] = [
         path: '',
         canActivate: [AuthGuard],
         loadComponent: () =>
-          import('@client/chat').then((c) => c.ChatFeatureComponent),
+          import('@client/chat/chatting-screen').then(
+            (c) => c.ChattingScreenComponent
+          ),
       },
       {
         path: 'me',

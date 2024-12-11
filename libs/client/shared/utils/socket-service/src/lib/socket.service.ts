@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import {
   SOCKET_CHAT_PATTERN,
   SOCKET_CONVERSATION_PATTERN,
-} from '@server/shared/socket-pattern';
+} from '@shared/socket-pattern';
 import { ISocketAdapter } from './socket.model';
 import { AppConfig, injectAppConfig } from '@client/utils/app-config';
 

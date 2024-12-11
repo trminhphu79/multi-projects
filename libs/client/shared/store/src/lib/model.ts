@@ -1,3 +1,5 @@
+import { NotificationEnum } from './enum';
+
 export type Profile = {
   id: number;
   accountId: number;
@@ -44,7 +46,15 @@ export type System = {
   sideBar: Partial<SideBarItem>[];
 };
 
+export type UserNotification = {
+  type: NotificationEnum;
+  timeSend: string;
+  content: string;
+  read: boolean;
+};
+
 export type AppState = {
   user: Partial<UserState>;
+  userNotifications: Array<UserNotification>;
   system: System;
 };

@@ -10,8 +10,9 @@ import {
 } from '@ngrx/signals';
 import { INITIAL_CHAT_STATE } from './chat.state';
 import { inject } from '@angular/core';
-import { Member, Message } from '../../model';
-import { SOCKET_CHAT_PATTERN } from '@server/shared/socket-pattern';
+import { Message } from '@shared/models/message';
+import { Member } from '@shared/models/conversation';
+import { SOCKET_CHAT_PATTERN } from '@shared/socket-pattern';
 import { tap } from 'rxjs';
 
 export const ChatStore = signalStore(
@@ -35,7 +36,7 @@ export const ChatStore = signalStore(
 
       sendMessage(message: string) {
         const { conversationId, conversation } = getState(store);
-        console.log("Send to: ", conversation.receiver)
+        console.log('Send to: ', conversation.receiver);
         socket.sendMessage(
           conversationId,
           message,

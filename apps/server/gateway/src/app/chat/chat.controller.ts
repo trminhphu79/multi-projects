@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 import {
   SOCKET_CHAT_PATTERN,
   SOCKET_CONVERSATION_PATTERN,
-} from '@server/shared/socket-pattern';
+} from '@shared/socket-pattern';
 import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
 import { catchError, EMPTY, tap } from 'rxjs';

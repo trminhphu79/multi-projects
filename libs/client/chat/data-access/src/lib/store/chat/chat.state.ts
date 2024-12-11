@@ -1,6 +1,5 @@
-import { Member } from './../../model/index';
-import { ChatState } from '../../model';
-import { ChatMessageStatus } from '../../enum';
+import { ChatState } from './chat.model';
+import { ChatMessageStatus } from '@shared/enums';
 
 export const INITIAL_CHAT_STATE: ChatState = {
   messages: [],

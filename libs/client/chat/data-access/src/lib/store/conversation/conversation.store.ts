@@ -12,8 +12,9 @@ import { ConversationApi } from '../../service';
 import { AppStore } from '@client/store/store';
 import { tap } from 'rxjs';
 import { injectSocket } from '@client/utils/socket';
-import { Conversation, Message } from '../../model';
-import { SOCKET_CHAT_PATTERN } from '@server/shared/socket-pattern';
+import { Conversation } from '@shared/models/conversation';
+import { Message } from '@shared/models/message';
+import { SOCKET_CHAT_PATTERN } from '@shared/socket-pattern';
 
 export const ConversationStore = signalStore(
   withState(INITIAL_CONVERSATION_STATE),

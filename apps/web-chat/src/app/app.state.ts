@@ -1,4 +1,5 @@
 import { AppState } from '@client/store/model';
+import { NotificationEnum } from 'libs/client/shared/store/src/lib/enum';
 
 export const SIDE_BAR_ITEM = [
   {
@@ -50,6 +51,134 @@ export const INITIAL_APP_STATE: AppState = {
       notificationsEnabled: false,
     },
   },
+  userNotifications: [
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: false,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have received a like from Vinh',
+      type: NotificationEnum.NEW_REACTION,
+      read: true,
+    },
+    {
+      timeSend: new Date().toISOString(),
+      content: 'You have a new requisition friend from Quan Huong',
+      type: NotificationEnum.NEW_FRIEND,
+      read: true,
+    },
+  ],
   system: {
     sideBar: SIDE_BAR_ITEM,
   },

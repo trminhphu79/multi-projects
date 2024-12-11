@@ -1,7 +1,7 @@
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ToastService } from '@client/utils/toast';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DockModule } from 'primeng/dock';
 import { MenuModule } from 'primeng/menu';
@@ -13,13 +13,18 @@ import { Router } from '@angular/router';
 import { AddFriendDialogComponent } from '@client/app-shell/add-friend-dialog';
 import { SideBarItem } from '@client/store/model';
 import { ProfileService } from '@client/profile/service';
-import { catchError, tap } from 'rxjs';
+import { catchError, interval, tap, timer } from 'rxjs';
 import { Profile } from '@client/profile/model';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { ScrollerModule } from 'primeng/scroller';
+import { TimeAgoPipe } from '@client/pipes/time-ago';
+import { NotificationEnum } from '@client/store/enum';
 
 @Component({
   selector: 'lib-side-bar',
   standalone: true,
   imports: [
+    TimeAgoPipe,
     CommonModule,
     DockModule,
     MenuModule,
@@ -27,11 +32,13 @@ import { Profile } from '@client/profile/model';
     TooltipModule,
     BadgeModule,
     ToastModule,
+    ScrollerModule,
+    OverlayPanelModule,
     AddFriendDialogComponent,
   ],
   providers: [MessageService, ToastService],
   templateUrl: './side-bar.component.html',
-  styleUrl: './side-bar.component.css',
+  styleUrl: './side-bar.component.scss',
 })
 export class SideBarComponent {
   private router = inject(Router);
@@ -43,9 +50,20 @@ export class SideBarComponent {
   protected currentUser = this.appState.user;
   protected profile = this.appState.user.profile;
 
+  @ViewChild('op') private overlayNotification!: OverlayPanel;
+  protected overlayStyle = {
+    width: '400px',
+    'min-height': '500px',
+    height: '70vh',
+    'overflow-y': 'auto',
+  };
+
   protected avatarUrl = computed(() => {
     return this.appState.user().profile?.avatarUrl;
   });
+
+  protected notifications = this.appState.userNotifications;
+  protected unreadCountNotis = this.appState.unreadCountNotis;
 
   protected toggleAddFriendDialog = signal(false);
   protected profileData = signal<Profile[]>([]);
@@ -57,13 +75,38 @@ export class SideBarComponent {
     index: 0,
   });
 
+  // ngAfterViewInit() {
+  //   interval(2000).subscribe(() => {
+  //     this.appState.pushNotification({
+  //       timeSend: new Date().toISOString(),
+  //       content: 'New message: ' + new Date().getTime() + '----',
+  //       type: NotificationEnum.NEW_REACTION,
+  //       read: false,
+  //     });
+  //     this.toastService.showMessage(
+  //       'success',
+  //       "You have been receive a new friend's invitation",
+  //       {
+  //         summary: 'System notify!',
+  //       }
+  //     );
+  //   });
+  // }
+  
   signOut() {
     this.appState.signOut();
     this.router.navigate(['/user']);
   }
 
-  onSelect(value: Partial<SideBarItem> | null, index: number) {
-    console.log('currentUser:', this.currentUser());
+  onSelect(
+    $event: any = null,
+    value: Partial<SideBarItem> | null,
+    index: number
+  ) {
+    if (value?.label == 'Notification') {
+      this.overlayNotification.toggle($event);
+      return;
+    }
     if (value?.label == 'Add friends') {
       this.toggleAddFriendDialog.set(true);
       return;
@@ -85,7 +128,6 @@ export class SideBarComponent {
   }
 
   onCancelDialog() {
-    console.log('onCancelDialog: ');
     this.toggleAddFriendDialog.set(false);
   }
 
@@ -112,7 +154,6 @@ export class SideBarComponent {
   }
 
   onSearchProfile(keyword: string) {
-    console.log('keyword: ', keyword);
     this.profileService
       .search({
         keyword,

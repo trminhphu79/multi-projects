@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { injectAppConfig } from '@client/utils/app-config';
-import { Conversation } from '../model';
+import { Conversation } from '@shared/models/conversation';
 import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
