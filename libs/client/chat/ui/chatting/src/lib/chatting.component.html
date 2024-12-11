@@ -4,14 +4,14 @@
   >
     <section class="w-full column-gap-3 flex">
       <p-avatar
-        [image]="sender()?.lastMessage?.avatarUrl"
+        [image]="sender()?.receiver?.avatarUrl"
         size="large"
         shape="circle"
       ></p-avatar>
       <section class="w-full flex flex-column">
-        <span class="mb-1">{{ sender()?.lastMessage?.fullName }}</span>
+        <span class="mb-1">{{ sender()?.receiver?.fullName }}</span>
         <div class="text-xs text-color">
-          {{ sender()?.lastMessage?.timeSend | date : 'medium' }}
+          <!-- {{ sender()?.lastMessage?.timeSend | date : 'medium' }} -->
         </div>
       </section>
     </section>
@@ -37,22 +37,22 @@
       <section
         class="ml-auto mb-4 col-6 column-gap-2 min-h-max bg-blue-700 py-2 px-2 border-round-bottom-2xl border-round-left-2xl cursor-pointer transition-duration-200"
       >
-        <div>
+        <div class="text-sm">
           {{ item.content }}
         </div>
-        <p class="text-xs p-0 mx-0 mb-0 mt-2">
-          {{ item?.timestamp || '2 mins ago' }}
+        <p class="text-xs p-0 mx-0 mb-0 mt-2 font-italic">
+          {{ item.timeSend | timeAgo }}
         </p>
       </section>
       } @else {
       <section
         class="mr-auto mb-4 col-6 column-gap-2 min-h-max bg-gray-800 py-2 px-2 border-round-bottom-2xl border-round-right-2xl cursor-pointer transition-duration-200"
       >
-        <div>
+        <div class="text-sm">
           {{ item.content }}
         </div>
-        <p class="text-xs p-0 mx-0 mb-0 mt-2">
-          {{ item?.timestamp || '2 mins ago' }}
+        <p class="text-xs p-0 mx-0 mb-0 mt-2 font-italic">
+          {{ item.timeSend | timeAgo }}
         </p>
       </section>
       } }

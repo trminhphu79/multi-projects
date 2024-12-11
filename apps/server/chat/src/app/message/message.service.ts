@@ -21,7 +21,7 @@ export class MessageService {
   ) {}
 
   async send(payload: SendMessageDto) {
-    const { senderId, receiverId, message } = payload;
+    const { senderId, receiverId, content } = payload;
 
     console.log('payload: ', payload);
 
@@ -77,7 +77,7 @@ export class MessageService {
       senderId,
       receiverId,
       conversationId: existingConversation.id,
-      content: message,
+      content,
     });
 
     console.log('newMessage: ', newMessage);

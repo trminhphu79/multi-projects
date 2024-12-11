@@ -161,7 +161,7 @@ export class ConversationService {
             model: Profile,
             as: 'members',
             attributes: ['id', 'fullName', 'avatarUrl'],
-            where: { id: profileId }, // Tìm các conversation có profileId
+            where: { id: profileId },
             through: { attributes: [] },
             required: true,
           },
@@ -170,20 +170,29 @@ export class ConversationService {
     ).pipe(
       switchMap((conversations) => {
         if (!conversations.length) {
-          return of([]); // Không có conversation nào
+          return of([]);
         }
+        const profileConversationMap = new Map<
+          number,
+          { conversationId: number; memberId: number }
+        >();
 
-        // Lấy danh sách conversationId
-        const conversationIds = conversations.map((c) => c.id);
+        const conversationIds = conversations.map((c) => {
+          const conversation = c.toJSON<Conversation>();
+          profileConversationMap.set(conversation.id, {
+            conversationId: conversation.id,
+            memberId: conversation.members[0].id,
+          });
+          return c.id;
+        });
 
-        // Tìm tất cả các member liên quan đến các conversationId
         return from(
           this.profileModel.findAll({
             include: [
               {
                 model: Conversation,
                 as: 'conversations',
-                attributes: ['id', 'name'], // Chỉ cần id và name của conversation
+                attributes: ['id', 'name'],
                 where: {
                   id: {
                     [Op.in]: conversationIds,
@@ -196,13 +205,30 @@ export class ConversationService {
           })
         ).pipe(
           map((profiles) =>
-            profiles
-              .filter((profile) => profile.id !== profileId) // Loại bỏ profileId hiện tại
-              .map((profile) => ({
-                id: profile.id,
-                fullName: profile.fullName,
-                avatarUrl: profile.avatarUrl,
-              }))
+            profiles?.map?.((profile) => {
+              console.log('Each profile: ', profile.toJSON());
+              const conversationFound = profile.conversations.find((conv) =>
+                profileConversationMap.get(conv.id)
+              );
+              return {
+                lastMessage: {
+                  isSender: profile.id == profileId,
+                  avatarUrl: profile.avatarUrl,
+                  id: profile.id,
+                  fullName: profile.fullName,
+                  content: '',
+                  timeSend: new Date().toISOString(),
+                },
+                id: conversationFound.id,
+                name: conversationFound.name,
+                receiver: {
+                  id: profile.id,
+                  avatarUrl: profile.avatarUrl,
+                  bio: profile.bio,
+                  fullName: profile.fullName,
+                },
+              };
+            })
           ),
           map((response) => ({
             data: response,

@@ -1,26 +1,22 @@
+import { TimeAgoPipe } from '@client/pipes/time-ago';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, input, OnInit, output, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MessageCategory, Conversation } from '@client/chat/model';
 import { ChipModule } from 'primeng/chip';
 import { CardModule } from 'primeng/card';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { AvatarModule } from 'primeng/avatar';
-import {
-  debounceTime,
-  delay,
-  distinctUntilChanged,
-  tap,
-} from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, tap } from 'rxjs';
 
 @Component({
   selector: 'lib-conversation',
   standalone: true,
   imports: [
-    DatePipe,
     ChipModule,
     CardModule,
+    TimeAgoPipe,
     CommonModule,
     AvatarModule,
     InputIconModule,
@@ -71,7 +67,6 @@ export class ConversationComponent implements OnInit {
   }
 
   protected onSelectConversation(item: Conversation, index: number) {
-    console.log("onSelectConversation: ", item);
     if (index == this.selectedConversation()?.index) return;
     this.selectedConversation.set({ value: item, index });
     this.selectConversationChanges.emit(item);

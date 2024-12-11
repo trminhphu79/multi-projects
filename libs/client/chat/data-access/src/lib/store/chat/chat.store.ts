@@ -1,58 +1,95 @@
 import { injectSocket } from '@client/utils/socket';
 import { AppStore } from '@client/store/store';
-import { withHooks, withMethods, signalStore, withState } from '@ngrx/signals';
+import {
+  withHooks,
+  withMethods,
+  signalStore,
+  withState,
+  getState,
+  patchState,
+} from '@ngrx/signals';
 import { INITIAL_CHAT_STATE } from './chat.state';
 import { inject } from '@angular/core';
-import { Message } from '../../model';
+import { Member, Message } from '../../model';
+import { SOCKET_CHAT_PATTERN } from '@server/shared/socket-pattern';
+import { tap } from 'rxjs';
 
 export const ChatStore = signalStore(
   withState(INITIAL_CHAT_STATE),
-  withMethods((store, appState = inject(AppStore)) => ({
-    sendMessage: (payload: any) => {
-      // socket.emit('SEND_MSG', payload);
-    },
-    disconnectSocket() {
-      console.log('disconnectSocket...');
-      // socket.disconnect();
-    },
-    registerInCommingMessage() {
-      // socket.connect();
-      console.log('registerInCommingMessage... ');
-      // socket
-      //   .fromEvent('NEW_MSG')
-      //   .pipe(
-      //     tap((newMessage: any) => {
-      //       patchState(store, {
-      //         messages: [
-      //           ...getState(store).messages,
-      //           mapingMessage(
-      //             newMessage,
-      //             appState.user().profile?.id as number
-      //           ),
-      //         ],
-      //       });
-      //       console.log('newMessage', newMessage);
-      //     })
-      //   )
-      //   .subscribe();
-    },
-  })),
+  withMethods(
+    (store, appState = inject(AppStore), socket = injectSocket()) => ({
+      reset() {
+        patchState(store, INITIAL_CHAT_STATE);
+      },
+
+      setConversation(id: number, messages: Message[], member: Member) {
+        patchState(store, {
+          conversationId: id,
+          messages: messages || [],
+          conversation: {
+            id,
+            receiver: member,
+          },
+        });
+      },
+
+      sendMessage(message: string) {
+        const { conversationId, conversation } = getState(store);
+        console.log("Send to: ", conversation.receiver)
+        socket.sendMessage(
+          conversationId,
+          message,
+          appState.user().profile?.id as number,
+          [conversation.receiver?.id as number]
+        );
+      },
+
+      subscribeMessage() {
+        socket
+          .listen(SOCKET_CHAT_PATTERN.NEW_MESSAGE)
+          .pipe(
+            tap((message: any) => {
+              if (getState(store).messages?.length) {
+                patchState(store, {
+                  messages: [
+                    ...getState(store).messages,
+                    mapingMessage(
+                      message,
+                      appState.user()?.profile?.id as number
+                    ),
+                  ],
+                });
+              } else {
+                patchState(store, {
+                  messages: [
+                    mapingMessage(
+                      message,
+                      appState.user()?.profile?.id as number
+                    ),
+                  ],
+                });
+              }
+            })
+          )
+          .subscribe();
+      },
+    })
+  ),
   withHooks({
     onDestroy(store) {
-      // store.disconnectSocket();
+      store.reset();
     },
     onInit(store) {
-      console.log("socketService:", )
-      // store.registerInCommingMessage();
+      store.subscribeMessage();
     },
   })
 );
 
-function mapingMessage(newMessage: any, currentId: number): Partial<Message> {
+function mapingMessage(newMessage: any, currentId: number): any {
   return {
     ...newMessage,
     isSender: newMessage.senderId == currentId,
     isReceiver: newMessage.senderId == currentId,
-    content: newMessage.content,
+    timeSend: new Date().toISOString(),
   };
 }

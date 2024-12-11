@@ -3,6 +3,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
 import { SendMessageDto } from '@server/shared/dtos/message';
 import { MessageService } from './message.service';
+import { of } from 'rxjs';
 
 @Controller()
 export class MessageController {
@@ -11,9 +12,9 @@ export class MessageController {
   @MessagePattern(MESSAGE_PATTERN_CHAT.SEND_MESSAGE)
   send(payload: SendMessageDto) {
     console.log(
-      `Message received from ${payload.senderId}: ${payload.message}`
+      `Message received from ${payload.senderId}: ${payload.content}`
     );
-    return this.service.send(payload);
+    return of(true)
   }
 
   @MessagePattern(MESSAGE_PATTERN_CHAT.PAGING)

@@ -20,7 +20,6 @@ import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
-  debounce,
   debounceTime,
   distinctUntilChanged,
   filter,
@@ -31,12 +30,14 @@ import {
   tap,
   timer,
 } from 'rxjs';
+import { TimeAgoPipe } from '@client/pipes/time-ago';
 @Component({
   selector: 'lib-chatting',
   standalone: true,
   imports: [
     DatePipe,
     CardModule,
+    TimeAgoPipe,
     CommonModule,
     AvatarModule,
     TooltipModule,
@@ -77,14 +78,11 @@ export class ChattingComponent implements AfterViewInit {
   });
 
   private screenSize$ = fromEvent(window, 'resize').pipe(
-    // Map the resize event to the current window dimensions
     map(() => ({
       width: window.innerWidth,
       height: window.innerHeight,
     })),
-    // Debounce to limit the number of events fired
     debounceTime(50),
-    // Emit the current size immediately when the observable starts
     startWith({
       width: window.innerWidth,
       height: window.innerHeight,
@@ -110,12 +108,12 @@ export class ChattingComponent implements AfterViewInit {
 
     fromEvent(this.chatControlRef.nativeElement, 'keyup')
       .pipe(
-        debounceTime(150),
+        debounceTime(10),
         filter((e: any) => e.keyCode === 13),
         distinctUntilChanged(),
         tap((res) => {
-          console.log('Chatting: ', res);
           this.sendMessage.emit(res?.target?.value);
+          this.chatControlRef.nativeElement.value = '';
         })
       )
       .subscribe();
@@ -138,10 +136,6 @@ export class ChattingComponent implements AfterViewInit {
       timer(100)
         .pipe(take(1))
         .subscribe(() => {
-          console.log(
-            'this.messageListRef.nativeElement.scrollHeight: ',
-            this.messageListRef.nativeElement.scrollHeight
-          );
           this.messageListRef.nativeElement.scrollTo({
             top: this.messageListRef.nativeElement.scrollHeight,
             behavior: 'smooth',

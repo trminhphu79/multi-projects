@@ -25,6 +25,7 @@ export const AppStore = signalStore(
         },
       });
       socket.connect();
+      socket.online(data.profile?.id as number);
     },
     resetState() {
       patchState(store, INITIAL_APP_STATE);

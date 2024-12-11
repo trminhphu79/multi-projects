@@ -22,6 +22,7 @@ import {
 import { ToastService } from '@client/utils/toast';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from '@client/profile/service';
+import { injectSocket } from '@client/utils/socket';
 @Component({
   selector: 'lib-user-feature',
   standalone: true,
@@ -40,6 +41,7 @@ import { ProfileService } from '@client/profile/service';
 })
 export class UserFeatureComponent {
   private router = inject(Router);
+  private socket = injectSocket();
   private service = inject(UserService);
   private appState = inject(AppStore);
   private toastService = inject(ToastService);
@@ -73,7 +75,6 @@ export class UserFeatureComponent {
         }),
         delay(500),
         tap((response) => {
-          console.log('response: ', response);
           this.appState.setUser({ ...response, isAuthenticated: true });
           this.router.navigate(['/']);
         })

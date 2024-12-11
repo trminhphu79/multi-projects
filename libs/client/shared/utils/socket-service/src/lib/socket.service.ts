@@ -43,10 +43,18 @@ export class SocketAdapterService implements ISocketAdapter {
   }
 
   /**
+   * Trigger status user online
+   * @param userId profile id of user
+   */
+  online(userId: number): void {
+    this.socket.emit(SOCKET_CONVERSATION_PATTERN.ONLINE, userId);
+  }
+
+  /**
    * Join a room
    * @param roomId Room ID to join
    */
-  joinRoom(roomId: string, userId: number): void {
+  joinRoom(roomId: number, userId: number): void {
     this.socket.emit(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM, { roomId, userId });
   }
 
@@ -54,7 +62,7 @@ export class SocketAdapterService implements ISocketAdapter {
    * Leave a room
    * @param roomId Room ID to leave
    */
-  leaveRoom(roomId: string, userId: number): void {
+  leaveRoom(roomId: number, userId: number): void {
     this.socket.emit(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM, {
       roomId,
       userId,
@@ -67,11 +75,12 @@ export class SocketAdapterService implements ISocketAdapter {
    * @param message Message content
    * @param senderId Sender ID
    */
-  sendMessage(roomId: string, message: string, senderId: string): void {
+  sendMessage(roomId: number, message: string, senderId: number, receiverIds: number[]): void {
     this.socket.emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE, {
       roomId,
       message,
       senderId,
+      receiverIds
     });
   }
 

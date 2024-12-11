@@ -26,7 +26,7 @@ export class ProfileService {
   }
 
   getUserFriends(profileId: number) {
-    return this.http.get<BaseResposne<UserFriend>>(
+    return this.http.get<UserFriend>(
       `${this.baseUrl}user-friend/${profileId}`
     );
   }

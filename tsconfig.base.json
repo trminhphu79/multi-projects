@@ -26,7 +26,7 @@
       ],
       "@client/chat/data-access": ["libs/client/chat/data-access/src/index.ts"],
       "@client/chat/data-access/conversation": [
-      "libs/client/chat/data-access/src/lib/store/conversation/index.ts"
+        "libs/client/chat/data-access/src/lib/store/conversation/index.ts"
       ],
       "@client/chat/enum": [
         "libs/client/chat/data-access/src/lib/enum/index.ts"
@@ -79,12 +79,18 @@
         "libs/client/shared/utils/socket-service/src/index.ts"
       ],
       "@client/utils/toast": ["libs/client/shared/utils/toast/src/index.ts"],
+      "@client/pipes/time-ago": [
+        "libs/client/shared/pipes/time-ago/src/index.ts"
+      ],
+
+
       "@nest-monorepo/decorators": ["libs/server/decorators/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
       "@nest-monorepo/message-container": [
         "libs/client/chat/ui/message-container/src/index.ts"
       ],
       "@nest-monorepo/microservice": ["libs/server/microservice/src/index.ts"],
+    
       "@server/auth/data-access": ["libs/server/auth/data-access/src/index.ts"],
       "@server/auth/feature": ["libs/server/auth/feature/src/index.ts"],
       "@server/auth/utils": ["libs/server/auth/utils/src/index.ts"],

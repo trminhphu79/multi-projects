@@ -3,9 +3,10 @@ import { Observable } from 'rxjs';
 export interface ISocketAdapter {
   connect(): void;
   disconnect(): void;
-  joinRoom(roomId: string, userId: number): void;
-  leaveRoom(roomId: string, userId: number): void;
-  sendMessage(roomId: string, message: string, senderId: string): void;
+  online(userId: number): void;
+  joinRoom(roomId: number, userId: number): void;
+  leaveRoom(roomId: number, userId: number): void;
+  sendMessage(roomId: number, message: string, senderId: number, receiver: number[] ): void;
   listen<T>(eventName: string): Observable<T>;
   removeListener(eventName: string): void;
 }
