@@ -30,10 +30,4 @@ import { ProfileWithFriends } from '@client/store/model';
   templateUrl: './chatting-screen.component.html',
   styleUrl: './chatting-screen.component.scss',
 })
-export class ChattingScreenComponent {
-  private appState = inject(AppStore);
-  private chatStore = inject(ChatStore);
-  private conversationStore = inject(ConversationStore);
-  protected conversation = this.chatStore.conversation;
-
-}
+export class ChattingScreenComponent {}
