@@ -14,6 +14,7 @@
     "rebuild-services": "nx build chat && nx build gateway && nx build auth",
     "build-run-chatapp": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env.production up --build -d",
     "build-run-chatapp:local": "nx build chat && nx build gateway && nx build auth && docker-compose --env-file .env up --build -d",
+    "build-run-services:prod": "nx build chat && nx build gateway && nx build auth",
     "build:app-chat": "nx build chat-with-me --prod",
     "serve:desktop-chat": "nx build chat-with-me && [ -d apps/desktop-chat/dist ] || mkdir -p apps/desktop-chat/dist && cp -R dist/apps/web-chat/browser/* apps/desktop-chat/dist/ && cd apps/desktop-chat && npm run start",
     "build-prod:desktop-chat": "nx build chat-with-me && [ -d apps/desktop-chat/dist ] || mkdir -p apps/desktop-chat/dist && cp -R dist/apps/web-chat/browser/* apps/desktop-chat/dist/ && cd apps/desktop-chat && npm run start"

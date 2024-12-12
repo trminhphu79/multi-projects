@@ -1,0 +1,1 @@
+import{Ab as i,Hb as m,da as o,jb as n,kb as r,tc as p}from"./chunk-5MFFBO5G.js";var s=(()=>{class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=o({type:e,selectors:[["lib-profile"]],standalone:!0,features:[m],decls:2,vars:0,template:function(t,f){t&1&&(n(0,"p"),i(1,"profile works!"),r())},dependencies:[p]})}return e})();export{s as ProfileComponent};
