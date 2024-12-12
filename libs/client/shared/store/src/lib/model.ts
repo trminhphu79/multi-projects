@@ -48,7 +48,7 @@ export type System = {
 
 export type UserNotification = {
   type: NotificationEnum;
-  timeSend: string;
+  createdAt: string;
   content: string;
   read: boolean;
 };

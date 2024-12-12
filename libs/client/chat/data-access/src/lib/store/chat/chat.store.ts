@@ -13,15 +13,51 @@ import { inject } from '@angular/core';
 import { Message } from '@shared/models/message';
 import { Member } from '@shared/models/conversation';
 import { SOCKET_CHAT_PATTERN } from '@shared/socket-pattern';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
+import { ConversationApi } from '../../service';
 
 export const ChatStore = signalStore(
   { providedIn: 'root' },
   withState(INITIAL_CHAT_STATE),
   withMethods(
-    (store, appState = inject(AppStore), socket = injectSocket()) => ({
+    (
+      store,
+      appState = inject(AppStore),
+      socket = injectSocket(),
+      conversationApi = inject(ConversationApi)
+    ) => ({
       reset() {
         patchState(store, INITIAL_CHAT_STATE);
+      },
+
+      getLatestMessage() {
+        const currentState = getState(store);
+        const { conversationId, messages } = currentState;
+        const currentUserId = appState.user().profile?.id;
+        if (conversationId != -1 && !messages?.length) {
+          conversationApi
+            .getLatestMessager({
+              offset: 0,
+              limit: 100,
+              keyword: '',
+              conversationId,
+            })
+            .pipe(
+              map((response) =>
+                response.data.map((item) => ({
+                  ...item,
+                  isSender: item.senderId === currentUserId,
+                }))
+              ),
+              tap((response) => {
+                console.log('getLatestMessage: ', response);
+                if (messages?.length == 0) {
+                  patchState(store, { messages: response });
+                }
+              })
+            )
+            .subscribe();
+        }
       },
 
       setConversation(id: number, messages: Message[], member: Member) {
@@ -92,6 +128,6 @@ function mapingMessage(newMessage: any, currentId: number): any {
     ...newMessage,
     isSender: newMessage.senderId == currentId,
     isReceiver: newMessage.senderId == currentId,
-    timeSend: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   };
 }

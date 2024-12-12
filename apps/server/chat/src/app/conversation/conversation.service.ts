@@ -8,7 +8,9 @@ import {
   CreateConversationDto,
   PagingConversationDto,
 } from '@server/shared/dtos/conversation';
+import { PagingMessageDto } from '@server/shared/dtos/message';
 import { Conversation } from '@server/shared/entity/conversation';
+import { Message } from '@server/shared/entity/message';
 import { Profile } from '@server/shared/entity/profile';
 import {
   Observable,
@@ -30,7 +32,9 @@ export class ConversationService {
     private conversationModel: typeof Conversation,
     @InjectModel(Profile)
     private profileModel: typeof Profile,
-    private sequelize: Sequelize
+    private sequelize: Sequelize,
+    @InjectModel(Message)
+    private messageModel: typeof Message
   ) {}
 
   createConversation(payload: CreateConversationDto): Observable<any> {
@@ -217,7 +221,7 @@ export class ConversationService {
                   id: profile.id,
                   fullName: profile.fullName,
                   content: '',
-                  timeSend: new Date().toISOString(),
+                  createdAt: new Date().toISOString(),
                 },
                 id: conversationFound.id,
                 name: conversationFound.name,
@@ -250,5 +254,52 @@ export class ConversationService {
     return {
       message: 'Conversation deleted successfully',
     };
+  }
+
+  /**
+   * Fetch paginated messages for a conversation using RxJS.
+   * @param dto PagingMessageDto with offset, limit, keyword, and conversationId.
+   * @returns An Observable of paginated messages.
+   */
+  fetchPaginatedMessages(dto: PagingMessageDto) {
+    const { offset, limit, keyword, conversationId } = dto;
+
+    if (!conversationId) {
+      return throwError(
+        () => new NotFoundException('Conversation ID must be provided.')
+      );
+    }
+
+    const whereCondition: any = { conversationId };
+
+    if (keyword) {
+      whereCondition.content = { [Op.iLike]: `%${keyword}%` };
+    }
+
+    return from(
+      this.messageModel.findAndCountAll({
+        where: whereCondition,
+        order: [['createdAt', 'DESC']],
+        limit,
+        offset,
+      })
+    ).pipe(
+      map((result) => {
+        if (!result.rows.length) {
+          throw new NotFoundException(
+            `No messages found for conversation ID ${conversationId}.`
+          );
+        }
+        return {
+          data: result.rows
+            .reverse(),
+          total: result.count,
+          message: 'Messages retrieved successfully.',
+        };
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
   }
 }

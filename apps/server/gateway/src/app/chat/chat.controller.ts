@@ -215,7 +215,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
             senderId: payload.senderId,
             receiverId: payload.receiverIds[0],
             unread: true,
-            timeSend: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
           });
         })
       )

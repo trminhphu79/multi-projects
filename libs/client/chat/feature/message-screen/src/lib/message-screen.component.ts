@@ -34,6 +34,7 @@ import {
   startWith,
   take,
   tap,
+  throttleTime,
   timer,
 } from 'rxjs';
 import { TimeAgoPipe } from '@client/pipes/time-ago';
@@ -80,21 +81,41 @@ export class MessageScreenComponent implements AfterViewInit, OnDestroy {
   private originalMessageContentHeight = signal<number>(0);
   private originalMessageActionHeight = signal<number>(60);
   protected showScrollBtn = signal(false);
+  private canListenEventScroll = signal(true);
+  private bufferMargin = signal(200);
   private observer!: IntersectionObserver;
 
   initIntersectionObserver() {
-    timer(2000).subscribe(() => {
-      this.observer = new IntersectionObserver(
-        (entries) => {
-          console.log('messageListRef: ...', entries);
-          const entry = entries[0];
-          this.showScrollBtn.set(entry.isIntersecting);
-        },
-        { root: this.messageListRef.nativeElement, threshold: 0.5 }
-      );
+    const chatWrapperEl = this.messageListRef.nativeElement;
 
-      this.observer.observe(this.scrollTrigger.nativeElement);
-    });
+    // Observe scroll events and throttle them for performance
+    fromEvent(chatWrapperEl, 'scroll')
+      .pipe(
+        throttleTime(100),
+        map(() => {
+          const distance = this.caclcDistanceFromBottom();
+          return {
+            isAtBottom: distance <= this.bufferMargin(),
+            distance,
+          };
+        })
+      )
+      .subscribe(({ isAtBottom, distance }) => {
+        if (isAtBottom) {
+          // Hide the scroll button if the user is already at the bottom
+          this.showScrollBtn.set(false);
+        } else {
+          // Show the scroll button if the user is far from the bottom
+          this.showScrollBtn.set(distance > this.bufferMargin());
+        }
+      });
+  }
+
+  private caclcDistanceFromBottom() {
+    const currentScrollTop = this.messageListRef.nativeElement.scrollTop;
+    const scrollHeight = this.messageListRef.nativeElement.scrollHeight;
+    const clientHeight = this.messageListRef.nativeElement.clientHeight;
+    return scrollHeight - (currentScrollTop + clientHeight);
   }
 
   protected contextMenuItems: MenuItem[] = [
@@ -151,7 +172,10 @@ export class MessageScreenComponent implements AfterViewInit, OnDestroy {
     this.conversationChanges$
       .pipe(
         delay(100),
-        tap(() => this.scrollToBottom())
+        tap(() => this.scrollToBottom()),
+        tap(()=> {
+          this.chatStore.getLatestMessage()
+        })
       )
       .subscribe();
 
@@ -182,6 +206,7 @@ export class MessageScreenComponent implements AfterViewInit, OnDestroy {
 
   protected scrollToBottom(): void {
     if (this.messageListRef) {
+      this.canListenEventScroll.set(false);
       timer(100)
         .pipe(take(1))
         .subscribe(() => {
@@ -189,6 +214,8 @@ export class MessageScreenComponent implements AfterViewInit, OnDestroy {
             top: this.messageListRef.nativeElement.scrollHeight,
             behavior: 'smooth',
           });
+          this.showScrollBtn.set(false);
+          this.canListenEventScroll.set(true);
         });
     }
   }
@@ -199,6 +226,9 @@ export class MessageScreenComponent implements AfterViewInit, OnDestroy {
 
   protected onSendMessage(message: string) {
     this.chatStore.sendMessage(message);
+    if (this.caclcDistanceFromBottom() <= this.bufferMargin()) {
+      this.scrollToBottom();
+    }
   }
 
   ngOnDestroy() {

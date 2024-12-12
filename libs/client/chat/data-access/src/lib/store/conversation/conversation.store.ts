@@ -148,7 +148,7 @@ export const ConversationStore = signalStore(
                     ...conv.lastMessage,
                     isSender: appState.user()?.profile?.id == response.senderId,
                     content: response.content,
-                    timeSend: response.timeSend,
+                    createdAt: response.createdAt,
                     onHighlight: true
                   };
 
@@ -160,7 +160,7 @@ export const ConversationStore = signalStore(
                     receiverId: response?.receiverId,
                     conversationId: response?.conversationId,
                     isSender: false,
-                    timeSend: response?.timeSend,
+                    createdAt: response?.createdAt,
                     isOld: false,
                     unread: true,
                   
@@ -175,8 +175,8 @@ export const ConversationStore = signalStore(
               });
               conversations.sort(
                 (a, b) =>
-                  new Date(b?.lastMessage?.timeSend).getTime() -
-                  new Date(a?.lastMessage?.timeSend).getTime()
+                  new Date(b?.lastMessage?.createdAt).getTime() -
+                  new Date(a?.lastMessage?.createdAt).getTime()
               );
               patchState(store, {
                 conversations: conversations,

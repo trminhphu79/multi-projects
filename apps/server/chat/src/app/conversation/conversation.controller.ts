@@ -7,6 +7,7 @@ import {
   PagingConversationDto,
 } from '@server/shared/dtos/conversation';
 import { from } from 'rxjs';
+import { PagingMessageDto } from '@server/shared/dtos/message';
 
 @Controller()
 export class ConversationController {
@@ -25,5 +26,10 @@ export class ConversationController {
   @MessagePattern(MESSAGE_PATTERN_CONVERSATION.PAGING)
   findMembersOfConversations(payload: PagingConversationDto) {
     return this.service.findMembersOfConversations(payload);
+  }
+
+  @MessagePattern(MESSAGE_PATTERN_CONVERSATION.PAGING_MESSAGE)
+  pagingMessage(payload: PagingMessageDto) {
+    return this.service.fetchPaginatedMessages(payload);
   }
 }

@@ -6,7 +6,7 @@ export type Message = {
   type?: string;
   conversationId: number;
   isSender?: boolean;
-  timeSend: string;
+  createdAt: string;
   unread?: boolean;
   isOld?: boolean;
 };

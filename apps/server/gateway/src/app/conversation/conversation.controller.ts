@@ -4,6 +4,7 @@ import {
   CreateConversationDto,
   PagingConversationDto,
 } from '@server/shared/dtos/conversation';
+import { PagingMessageDto } from '@server/shared/dtos/message';
 import { MESSAGE_PATTERN_CONVERSATION } from '@server/shared/message-pattern';
 
 @Controller('conversation')
@@ -21,5 +22,13 @@ export class ConversationController {
   @Post('search')
   paging(@Body() payload: PagingConversationDto) {
     return this.clientProxy.send(MESSAGE_PATTERN_CONVERSATION.PAGING, payload);
+  }
+
+  @Post('pagingMessage')
+  pagingMessage(@Body() payload: PagingMessageDto) {
+    return this.clientProxy.send(
+      MESSAGE_PATTERN_CONVERSATION.PAGING_MESSAGE,
+      payload
+    );
   }
 }

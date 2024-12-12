@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { injectAppConfig } from '@client/utils/app-config';
 import { Conversation } from '@shared/models/conversation';
-import { map } from 'rxjs';
+import { Message } from '@shared/models/message';
 
 @Injectable({ providedIn: 'root' })
 export class ConversationApi {
@@ -19,6 +19,18 @@ export class ConversationApi {
   ) {
     return this.http.post<{ data: Conversation[] }>(
       `${this.baseUrl}conversation/search`,
+      payload
+    );
+  }
+
+  getLatestMessager(payload: {
+    limit: number;
+    offset: number;
+    conversationId: number;
+    keyword: string;
+  }) {
+    return this.http.post<{ data: Message[] }>(
+      `${this.baseUrl}conversation/pagingMessage`,
       payload
     );
   }

@@ -1,0 +1,7 @@
+#main-layout .left-layout {
+  width: 40px;
+}
+
+#main-layout .right-layout {
+  width: calc(100% - 68px);
+}
