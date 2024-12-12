@@ -8,12 +8,14 @@ import {
 } from './profile.model';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { injectAppConfig } from '@client/utils/app-config';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
   http: HttpClient = inject(HttpClient);
-  baseUrl = 'http://localhost:3000/profile/';
-
+  private appConfig = injectAppConfig();
+  private baseUrl = this.appConfig.apiUrl + '/profile/';
+  
   search(payload: SearchProfilePayload) {
     return this.http.post<BaseResposne<Profile[]>>(
       `${this.baseUrl}search-friend`,

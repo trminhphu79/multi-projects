@@ -42,6 +42,6 @@ export const appRoutes: Route[] = [
   {
     path: '**',
     loadComponent: () =>
-      import('@client/page-not-found').then((c) => c.PageNotFoundComponent),
+      import('@client/ui/page-not-found').then((c) => c.PageNotFoundComponent),
   },
 ];

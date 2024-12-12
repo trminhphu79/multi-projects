@@ -1,14 +1,7 @@
 import { ConversationStore } from '@client/chat/data-access/conversation';
 import { AppStore } from './../../../../../shared/store/src/lib/store';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Conversation, MessageCategory } from '@shared/models/conversation';
 import { ChipModule } from 'primeng/chip';
@@ -16,11 +9,11 @@ import { CardModule } from 'primeng/card';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { AvatarModule } from 'primeng/avatar';
-import { debounceTime, delay, distinctUntilChanged, tap } from 'rxjs';
 import { ConversationListComponent } from '@client/chat/ui/conversation-list';
 import { ChatStore } from 'libs/client/chat/data-access/src/lib/store/chat';
 import { ProfileWithFriends } from '@client/store/model';
 import { ConversationHeaderComponent } from '@client/chat/ui/conversation-header';
+import { InputSearchComponent } from '@client/ui/input-search';
 
 @Component({
   selector: 'cwm-conversation',
@@ -33,13 +26,14 @@ import { ConversationHeaderComponent } from '@client/chat/ui/conversation-header
     InputIconModule,
     IconFieldModule,
     ReactiveFormsModule,
+    InputSearchComponent,
     ConversationListComponent,
     ConversationHeaderComponent,
   ],
   templateUrl: './conversation.component.html',
   styleUrl: './conversation.component.scss',
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent {
   protected searching = signal(false);
   protected searchControl = new FormControl<string>('');
 
@@ -60,6 +54,7 @@ export class ConversationComponent implements OnInit {
   protected messages = this.chatStore.messages;
   protected conversations = this.conversationStore.conversations;
 
+  protected isSearching = signal(false);
   protected conversation = signal<Conversation | null>(null);
   protected messageCategories = signal<MessageCategory[]>([
     {
@@ -76,23 +71,8 @@ export class ConversationComponent implements OnInit {
     },
   ]);
 
-  ngOnInit() {
-    this.registerValueChanges();
-  }
-
-  private registerValueChanges() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        tap((keyword: string | null) => {
-          this.searching.set(true);
-          // this.searchConversationChanges.emit(keyword);
-        }),
-        delay(2000),
-        tap(() => this.searching.set(false))
-      )
-      .subscribe();
+  protected onSearchChanges(keyword: string | null) {
+    console.log('onSearchChanges: ', keyword);
   }
 
   protected onSelectConversation(input: { item: Conversation; index: number }) {

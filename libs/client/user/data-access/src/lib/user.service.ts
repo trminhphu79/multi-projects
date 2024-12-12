@@ -3,11 +3,13 @@ import { inject } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { UserSignInPayload, UserSignUpPayload } from './user.model';
 import { of } from 'rxjs';
+import { injectAppConfig } from '@client/utils/app-config';
 
 @Injectable()
 export class UserService {
   private http: HttpClient = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000/auth/';
+  private appConfig = injectAppConfig();
+  private baseUrl = this.appConfig.apiUrl + '/auth/';
 
   signIn(payload: UserSignInPayload) {
     return this.http.post(`${this.baseUrl}authenticate`, payload);

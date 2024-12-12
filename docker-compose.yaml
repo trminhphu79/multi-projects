@@ -1,5 +1,3 @@
-version: "3"
-
 services:
     nats:
       container_name: nats
