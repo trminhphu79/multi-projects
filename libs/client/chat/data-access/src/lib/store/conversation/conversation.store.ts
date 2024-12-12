@@ -121,7 +121,7 @@ export const ConversationStore = signalStore(
       },
 
       leaveAllRoom() {
-        getState(store).conversations.forEach((conv) => {
+        getState(store).conversations?.forEach?.((conv) => {
           socket.leaveRoom(conv.id, appState.user()?.profile?.id as number);
         });
         timer(2000).subscribe(() => {
