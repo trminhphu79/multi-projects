@@ -3,7 +3,11 @@ import { AppStore } from './../../../../../shared/store/src/lib/store';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Conversation, MessageCategory } from '@shared/models/conversation';
+import {
+  Conversation,
+  Member,
+  MessageCategory,
+} from '@shared/models/conversation';
 import { ChipModule } from 'primeng/chip';
 import { CardModule } from 'primeng/card';
 import { InputIconModule } from 'primeng/inputicon';
@@ -55,7 +59,7 @@ export class ConversationComponent {
   protected conversations = this.conversationStore.conversations;
 
   protected isSearching = signal(false);
-  protected conversation = signal<Conversation | null>(null);
+  protected conversation = this.conversationStore.selectedConversation;
   protected messageCategories = signal<MessageCategory[]>([
     {
       label: 'All',
@@ -89,13 +93,12 @@ export class ConversationComponent {
       this.chatStore.reset();
     }
 
-    this.conversation.set(input.item);
+    this.conversationStore.setSelectedConversation(input.item);
     this.conversationStore.joinRoom(input.item.id, id);
-    console.log('item.receiver: ', input.item.receiver);
     this.chatStore.setConversation(
       input.item.id,
       this.conversationStore.getConversationMessages(input.item.id),
-      input.item.receiver
+      input.item?.receiver as Member
     );
   }
 

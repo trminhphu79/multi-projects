@@ -11,7 +11,7 @@ import { INITIAL_APP_STATE } from './state';
 import { AppState, UserState } from './model';
 import { injectAppState } from './token';
 import { injectSocket } from '@client/utils/socket';
-import { computed } from '@angular/core';
+import { computed, inject } from '@angular/core';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
@@ -32,14 +32,14 @@ export const AppStore = signalStore(
           ...data,
         },
       });
-      socket.connect();
-      socket.online(data.profile?.id as number);
+      socket.connect(() => {
+        socket.online(data.profile?.id as number);
+      });
     },
     resetState() {
       patchState(store, INITIAL_APP_STATE);
     },
     signOut() {
-      socket.disconnect();
       patchState(store, {
         user: {
           isAuthenticated: false,

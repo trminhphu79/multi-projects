@@ -22,7 +22,7 @@ import {
 import { ToastService } from '@client/utils/toast';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from '@client/profile/service';
-import { injectSocket } from '@client/utils/socket';
+import { ConversationStore } from '@client/chat/data-access/conversation';
 @Component({
   selector: 'lib-user-feature',
   standalone: true,
@@ -41,11 +41,11 @@ import { injectSocket } from '@client/utils/socket';
 })
 export class UserFeatureComponent {
   private router = inject(Router);
-  private socket = injectSocket();
   private service = inject(UserService);
   private appState = inject(AppStore);
   private toastService = inject(ToastService);
   private profileService = inject(ProfileService);
+  private conversationStore = inject(ConversationStore);
 
   protected screenState = signal('SIGN_IN');
 
@@ -76,6 +76,8 @@ export class UserFeatureComponent {
         delay(500),
         tap((response) => {
           this.appState.setUser({ ...response, isAuthenticated: true });
+          this.conversationStore.getConversations();
+          this.conversationStore.registerNewMessageConversation();
           this.router.navigate(['/']);
         })
       )

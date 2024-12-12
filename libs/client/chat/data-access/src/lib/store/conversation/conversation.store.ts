@@ -10,13 +10,14 @@ import { INITIAL_CONVERSATION_STATE } from './conversation.state';
 import { inject } from '@angular/core';
 import { ConversationApi } from '../../service';
 import { AppStore } from '@client/store/store';
-import { tap } from 'rxjs';
+import { tap, timer } from 'rxjs';
 import { injectSocket } from '@client/utils/socket';
 import { Conversation } from '@shared/models/conversation';
 import { Message } from '@shared/models/message';
-import { SOCKET_CHAT_PATTERN } from '@shared/socket-pattern';
+import { SOCKET_CONVERSATION_PATTERN } from '@shared/socket-pattern';
 
 export const ConversationStore = signalStore(
+  { providedIn: 'root' },
   withState(INITIAL_CONVERSATION_STATE),
   withMethods(
     (
@@ -62,6 +63,10 @@ export const ConversationStore = signalStore(
         patchState(store, INITIAL_CONVERSATION_STATE);
       },
 
+      setSelectedConversation(selectedConversation: Conversation) {
+        patchState(store, { selectedConversation });
+      },
+
       getConversations() {
         conversationApi
           .getConversations({
@@ -82,20 +87,34 @@ export const ConversationStore = signalStore(
       },
 
       joinRoom(conversationId: number, userId: number) {
-        console.log('joinRoom: ', conversationId, userId);
         socket.joinRoom(conversationId, userId);
       },
 
       leaveRoom(conversationId: number, userId: number) {
-        console.log('leaveRoom: ', conversationId, userId);
         socket.leaveRoom(conversationId, userId);
       },
 
+      leaveAllRoom() {
+        getState(store).conversations.forEach((conv) => {
+          socket.leaveRoom(conv.id, appState.user()?.profile?.id as number);
+        });
+        timer(2000).subscribe(() => {
+          socket.disconnect();
+        });
+        patchState(store, INITIAL_CONVERSATION_STATE);
+      },
+
       registerNewMessageConversation() {
+        const roomId =
+          SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM +
+          '__' +
+          appState.user().profile?.id;
+        console.log('registerNewMessageConversation: ', roomId);
         socket
-          .listen(SOCKET_CHAT_PATTERN.NEW_LAST_MESSAGE)
+          .listen(roomId)
           .pipe(
             tap((response: any) => {
+              console.log('SOCKET_CHAT_PATTERN.CONVERSATION_ROOM: ', response);
               const conversations = getState(store).conversations;
               conversations.forEach((conv) => {
                 if (conv.id === response?.conversationId) {
@@ -105,6 +124,21 @@ export const ConversationStore = signalStore(
                     content: response.content,
                     timeSend: response.timeSend,
                   };
+                  const msg: Message = {
+                    content: response?.content,
+                    senderId: response?.senderId,
+                    receiverId: response?.receiverId,
+                    conversationId: response?.conversationId,
+                    isSender: false,
+                    timeSend: response?.timeSend,
+                    isOld: false,
+                  };
+
+                  if (!conv.messages?.length) {
+                    conv.messages = [msg];
+                  } else {
+                    conv.messages.push(msg);
+                  }
                 }
               });
               conversations.sort(
@@ -125,12 +159,10 @@ export const ConversationStore = signalStore(
     })
   ),
   withHooks({
-    onInit(store) {
-      store.getConversations();
-      store.registerNewMessageConversation();
-    },
     onDestroy(store) {
       store.reset();
+      store.leaveAllRoom();
+      console.log('onDestroy....');
     },
   })
 );

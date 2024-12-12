@@ -26,7 +26,7 @@ import { ProfileWithFriends } from '@client/store/model';
     ReactiveFormsModule,
     ConversationComponent,
   ],
-  providers: [ChatStore, ConversationStore],
+  providers: [ChatStore],
   templateUrl: './chatting-screen.component.html',
   styleUrl: './chatting-screen.component.scss',
 })

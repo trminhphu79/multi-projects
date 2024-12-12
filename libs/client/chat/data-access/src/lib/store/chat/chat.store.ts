@@ -16,6 +16,7 @@ import { SOCKET_CHAT_PATTERN } from '@shared/socket-pattern';
 import { tap } from 'rxjs';
 
 export const ChatStore = signalStore(
+  { providedIn: 'root' },
   withState(INITIAL_CHAT_STATE),
   withMethods(
     (store, appState = inject(AppStore), socket = injectSocket()) => ({
@@ -43,6 +44,18 @@ export const ChatStore = signalStore(
           appState.user().profile?.id as number,
           [conversation.receiver?.id as number]
         );
+
+        patchState(store, {
+          messages: [
+            ...getState(store).messages,
+            {
+              isSender: true,
+              isReceiver: false,
+              content: message,
+              timeSend: new Date().toISOString(),
+            } as any,
+          ],
+        });
       },
 
       subscribeMessage() {

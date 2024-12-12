@@ -9,9 +9,9 @@
       selectedConversation()?.index === $index ? 'bg-gray-800' : 'bg-gray-900'
     }} py-2 px-2 border-round-md cursor-pointer  transition-duration-200"
   >
-    @if(item.receiver.avatarUrl){
+    @if(item.receiver?.avatarUrl){
     <p-avatar
-      [image]="item.receiver.avatarUrl"
+      [image]="item.receiver?.avatarUrl"
       size="large"
       shape="circle"
     ></p-avatar>
@@ -20,7 +20,7 @@
     <p-avatar label="P" size="large" shape="circle"></p-avatar>
     }
     <section class="w-full">
-      <span class="flex-1">{{ item.receiver.fullName }}</span>
+      <span class="flex-1">{{ item.receiver?.fullName }}</span>
       <div class="mt-2 flex w-full">
         <span class="flex-1 text-xs">{{ item.lastMessage.content }}</span>
         <span class="text-xs">{{ item.lastMessage.timeSend | timeAgo }}</span>

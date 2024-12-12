@@ -31,67 +31,78 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private natsClient: ClientProxy
   ) {}
 
-  private userRooms: Map<string, string[]> = new Map();
+  private userChatRooms: Map<string, string[]> = new Map();
 
   private roomsMaps: Map<string, string[]> = new Map();
+  private conversationRooms: Map<string, string[]> = new Map();
 
   private usersOnline: Map<number, { userId: number; clientId: string }> =
     new Map();
 
   handleConnection(client: Socket) {
     Logger.log(`Socket --- Client connected: ${client.id}`);
-    this.userRooms.set(client.id, []);
+    this.userChatRooms.set(client.id, []);
   }
 
   handleDisconnect(client: Socket) {
     Logger.log(`Socket --- Client disconnected: ${client.id}`);
-    this.userRooms.delete(client.id);
+    this.userChatRooms.delete(client.id);
     Array.from(this.usersOnline).forEach((u) => {
       if (u[1].clientId == client.id) {
         this.usersOnline.delete(u[1].userId);
+        this.removeClientFromConversationRoom(
+          client,
+          SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM
+        );
         Logger.log(`Socket --- User Ofline: ${u[1].userId}`);
       }
     });
+
+    Logger.log(`Socket --- number user online: ${this.usersOnline.size}`);
+    Logger.log(`Socket --- number roomsMaps: ${this.roomsMaps.size}`);
   }
 
   @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.ONLINE)
   handleUserOnline(client: Socket, userId: number) {
     Logger.log(`Socket --- User Online: ${userId}`);
     this.usersOnline.set(userId, { userId, clientId: client.id });
+    this.addClientToConversationRoom(
+      client,
+      SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM + '__' + userId
+    );
   }
 
   @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.JOIN_ROOM)
   handleJoinRoom(client: Socket, { roomId }: JoinRoomDto) {
     Logger.log(`Socket --- Client ${client.id} joining room: ${roomId}`);
     client.join(roomId);
-    const rooms = this.userRooms.get(client.id) || [];
-    this.userRooms.set(client.id, [...rooms, roomId]);
+    const rooms = this.userChatRooms.get(client.id) || [];
+    this.userChatRooms.set(client.id, [...rooms, roomId]);
     client.to(roomId).emit(SOCKET_CONVERSATION_PATTERN.USER_JOINED, {
-      userId: client.id,
       roomId,
     });
-    this.addClientToRoom(client, roomId);
+
+    this.addClientToChatRoom(client, roomId);
   }
 
   @SubscribeMessage(SOCKET_CONVERSATION_PATTERN.LEAVE_ROOM)
   handleLeaveRoom(client: Socket, { roomId }: LeaveRoomDto) {
-    Logger.log(`Socket --- Client ${client.id} leaving room: ${roomId}`);
     client.leave(roomId);
-    const rooms = this.userRooms.get(client.id) || [];
-    this.userRooms.set(
+    const rooms = this.userChatRooms.get(client.id) || [];
+    this.userChatRooms.set(
       client.id,
       rooms.filter((r) => r !== roomId)
     );
-    this.removeClientFromRoom(client, roomId);
     client.to(roomId).emit(SOCKET_CONVERSATION_PATTERN.USER_LEFT, {
-      userId: client.id,
       roomId,
     });
+    this.removeClientFromChatRoom(client, roomId);
+    Logger.log(`Socket --- Client ${client.id} leaving room: ${roomId}`);
   }
 
   @SubscribeMessage(SOCKET_CHAT_PATTERN.SEND_MESSAGE)
   handleSendMessage(client: Socket, input: NewMessageDto) {
-    const isSendGroup = input.receiverIds.length > 1;
+    const isSendGroup = input.receiverIds?.length > 1;
     if (isSendGroup) {
       this.handleSendGroupMessage(input);
       return;
@@ -148,9 +159,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.handleSendMessageUserOffRoom(input);
         Logger.warn(`Socket --- Send message but user has off room!!: `);
         break;
-      case RoomConnectionStatus.EMPTY:
-        Logger.warn(`Socket --- Send Message To Empty Client In ROOM....: `);
-        break;
     }
   }
 
@@ -183,8 +191,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   //TODO: Need to send message up lastmessage of conversation
   private handleSendMessageUserOffRoom(payload: NewMessageDto) {
-    console.log('handleSendMessageUserOffRoom');
-    this.server.to(payload.roomId).emit(SOCKET_CHAT_PATTERN.NEW_LAST_MESSAGE, {
+    const roomId =
+      SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM +
+      '__' +
+      payload.receiverIds[0];
+    this.server.emit(roomId, {
       content: payload.message,
       conversationId: payload.roomId,
       senderId: payload.senderId,
@@ -198,10 +209,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private isUserOnline(userId: number) {
-    return this.usersOnline.get(userId);
+    return !!this.usersOnline.get(userId);
   }
 
-  private addClientToRoom(client: Socket, roomId: string) {
+  private addClientToChatRoom(client: Socket, roomId: string) {
     if (!this.roomsMaps.has(roomId)) {
       this.roomsMaps.set(roomId, [client.id]);
     } else {
@@ -210,15 +221,38 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  private removeClientFromRoom(client: Socket, roomId: string) {
+  private removeClientFromChatRoom(client: Socket, roomId: string) {
     if (!this.roomsMaps.has(roomId)) {
       return;
     }
-
+    console.log('Current Client: ', client.id);
     const clientIds = this.roomsMaps
       .get(roomId)
       .filter((clientId) => clientId !== client.id);
+    console.log('clientIds: ', clientIds);
     this.roomsMaps.set(roomId, clientIds);
+    console.log('removeClientFromChatRoom: ', this.roomsMaps.entries());
+  }
+
+  private addClientToConversationRoom(client: Socket, roomId: string) {
+    if (!this.conversationRooms.has(roomId)) {
+      this.conversationRooms.set(roomId, [client.id]);
+    } else {
+      const clientIds = [...this.conversationRooms.get(roomId), client.id];
+      this.conversationRooms.set(roomId, clientIds);
+    }
+    Logger.log(`Socket --- ADD User Conversation ROOM: ${roomId}`);
+  }
+
+  private removeClientFromConversationRoom(client: Socket, roomId: string) {
+    if (!this.conversationRooms.has(roomId)) {
+      return;
+    }
+    Logger.log(`Socket --- Remove User Conversation ROOM: ${roomId}`);
+    const clientIds = this.conversationRooms
+      .get(roomId)
+      .filter((clientId) => clientId !== client.id);
+    this.conversationRooms.set(roomId, clientIds);
   }
 
   private checkReceiverStatus(
@@ -226,11 +260,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     roomId: string
   ): UserConnectionStatus | RoomConnectionStatus {
     const isOnl = this.isUserOnline(userId);
-    const lengthOfRoom = this.roomsMaps.get(roomId).length;
-    const isRoomEmpty = !this.roomsMaps.has(roomId) || lengthOfRoom == 0;
+    const lengthOfRoom = this.roomsMaps.get(roomId)?.length;
     const isRoomOnlyClient = lengthOfRoom == 1;
+    console.log('lengthOfRoom: ', lengthOfRoom);
+    console.log('isOnl: ', isOnl);
+    console.log('isRoomOnlyClient: ', isRoomOnlyClient);
     if (!isOnl) return UserConnectionStatus.OFFLINE;
-    if (isRoomEmpty) return RoomConnectionStatus.EMPTY;
     if (isRoomOnlyClient) return RoomConnectionStatus.RECEIVER_OFF_ROOM;
     return isOnl && UserConnectionStatus.ONLINE;
   }

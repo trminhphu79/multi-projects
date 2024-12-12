@@ -20,7 +20,7 @@ export type Conversation = {
     avatarUrl: string;
     isSender: boolean;
   };
-  receiver: Member;
+  receiver: Member|null;
   members?: Member[];
 };
 

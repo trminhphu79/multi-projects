@@ -19,6 +19,8 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { ScrollerModule } from 'primeng/scroller';
 import { TimeAgoPipe } from '@client/pipes/time-ago';
 import { NotificationEnum } from '@client/store/enum';
+import { ConversationStore } from '@client/chat/data-access/conversation';
+import { ChatStore } from '@client/chat/data-access';
 
 @Component({
   selector: 'lib-side-bar',
@@ -43,8 +45,10 @@ import { NotificationEnum } from '@client/store/enum';
 export class SideBarComponent {
   private router = inject(Router);
   private appState = inject(AppStore);
+  private chatStore = inject(ChatStore);
   private toastService = inject(ToastService);
   private profileService = inject(ProfileService);
+  private conversationStore = inject(ConversationStore);
 
   protected sideBarItems = this.appState.system.sideBar;
   protected currentUser = this.appState.user;
@@ -75,27 +79,14 @@ export class SideBarComponent {
     index: 0,
   });
 
-  // ngAfterViewInit() {
-  //   interval(2000).subscribe(() => {
-  //     this.appState.pushNotification({
-  //       timeSend: new Date().toISOString(),
-  //       content: 'New message: ' + new Date().getTime() + '----',
-  //       type: NotificationEnum.NEW_REACTION,
-  //       read: false,
-  //     });
-  //     this.toastService.showMessage(
-  //       'success',
-  //       "You have been receive a new friend's invitation",
-  //       {
-  //         summary: 'System notify!',
-  //       }
-  //     );
-  //   });
-  // }
-  
   signOut() {
+    this.conversationStore.leaveAllRoom();
     this.appState.signOut();
     this.router.navigate(['/user']);
+    this.conversationStore.resotreMessageToConversation(
+      this.chatStore.conversationId(),
+      this.chatStore.messages()
+    );
   }
 
   onSelect(
