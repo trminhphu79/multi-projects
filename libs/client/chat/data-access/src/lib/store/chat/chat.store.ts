@@ -44,18 +44,6 @@ export const ChatStore = signalStore(
           appState.user().profile?.id as number,
           [conversation.receiver?.id as number]
         );
-
-        patchState(store, {
-          messages: [
-            ...getState(store).messages,
-            {
-              isSender: true,
-              isReceiver: false,
-              content: message,
-              timeSend: new Date().toISOString(),
-            } as any,
-          ],
-        });
       },
 
       subscribeMessage() {

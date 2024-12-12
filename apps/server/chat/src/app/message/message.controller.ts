@@ -1,7 +1,7 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
-import { SendMessageDto } from '@server/shared/dtos/message';
+import { CreateMessageDto } from '@server/shared/dtos/message';
 import { MessageService } from './message.service';
 import { of } from 'rxjs';
 
@@ -10,11 +10,9 @@ export class MessageController {
   constructor(private service: MessageService) {}
 
   @MessagePattern(MESSAGE_PATTERN_CHAT.SEND_MESSAGE)
-  send(payload: SendMessageDto) {
-    console.log(
-      `Message received from ${payload.senderId}: ${payload.content}`
-    );
-    return of(true)
+  send(payload: CreateMessageDto) {
+    Logger.log(`Message received from ${payload.senderId}: ${payload.content}`);
+    return this.service.send(payload);
   }
 
   @MessagePattern(MESSAGE_PATTERN_CHAT.PAGING)

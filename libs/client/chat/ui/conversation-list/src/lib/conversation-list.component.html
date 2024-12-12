@@ -3,11 +3,17 @@
   [style.height]="'calc(100% - 150px)'"
 >
   @for (item of dataSource(); track $index) {
-  <section
+  <div
     (click)="onSelectConversation(item, $index)"
-    class="w-full flex column-gap-2 min-h-max hover:bg-gray-800 {{
-      selectedConversation()?.index === $index ? 'bg-gray-800' : 'bg-gray-900'
-    }} py-2 px-2 border-round-md cursor-pointer  transition-duration-200"
+    cwmHighlight
+    [highlight]="!!item.lastMessage.onHighlight"
+    (offHighlight)="turnOffHighlight.emit(item.id)"
+    class="w-full flex column-gap-2 min-h-max hover:bg-gray-800 py-2 px-2 border-round-md cursor-pointer transition-duration-200"
+    [ngClass]="{
+      'bg-gray-900':
+        !item.lastMessage.unread && selectedConversation()?.index !== $index,
+      'bg-gray-800': selectedConversation()?.index === $index
+    }"
   >
     @if(item.receiver?.avatarUrl){
     <p-avatar
@@ -19,13 +25,18 @@
     } @else {
     <p-avatar label="P" size="large" shape="circle"></p-avatar>
     }
-    <section class="w-full">
+    <section
+      class="w-full"
+      [ngClass]="{
+        'text-blue-500': item.lastMessage.unread
+      }"
+    >
       <span class="flex-1">{{ item.receiver?.fullName }}</span>
       <div class="mt-2 flex w-full">
         <span class="flex-1 text-xs">{{ item.lastMessage.content }}</span>
         <span class="text-xs">{{ item.lastMessage.timeSend | timeAgo }}</span>
       </div>
     </section>
-  </section>
+  </div>
   }
 </section>

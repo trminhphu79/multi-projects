@@ -12,7 +12,7 @@ module.exports = [
         'error',
         {
           type: 'attribute',
-          prefix: 'lib',
+          prefix: 'cwm',
           style: 'camelCase',
         },
       ],
@@ -20,7 +20,7 @@ module.exports = [
         'error',
         {
           type: 'element',
-          prefix: 'lib',
+          prefix: 'cwm',
           style: 'kebab-case',
         },
       ],
@@ -29,9 +29,6 @@ module.exports = [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {
-      '@angular-eslint/template/click-events-have-key-events': ['off'],
-      '@angular-eslint/template/interactive-supports-focus': ['off'],
-    },
+    rules: {},
   },
 ];

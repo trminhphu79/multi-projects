@@ -4,11 +4,18 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { TimeAgoPipe } from '@client/pipes/time-ago';
+import { HighLightDirective } from '@client/directives/highlight';
 
 @Component({
   selector: 'cwm-conversation-list',
   standalone: true,
-  imports: [TimeAgoPipe, CommonModule, AvatarModule, ReactiveFormsModule],
+  imports: [
+    TimeAgoPipe,
+    CommonModule,
+    AvatarModule,
+    HighLightDirective,
+    ReactiveFormsModule,
+  ],
   templateUrl: './conversation-list.component.html',
   styleUrl: './conversation-list.component.scss',
 })
@@ -18,6 +25,7 @@ export class ConversationListComponent {
   searchConversationChanges = output<string | null>();
   selectConversationChanges = output<{ item: Conversation; index: number }>();
   selecteMessageCategoryChanges = output<MessageCategory>();
+  turnOffHighlight = output<number>();
 
   protected searching = signal(false);
   protected searchControl = new FormControl<string>('');

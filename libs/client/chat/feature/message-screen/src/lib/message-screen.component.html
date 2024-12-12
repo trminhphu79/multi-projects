@@ -33,6 +33,7 @@
       class="overflow-y-auto mt-2 px-2"
       [style.height]="computedMessageContentHeight()"
     >
+      <div #scrollTrigger class="scroll-trigger"></div>
       @for (item of messages(); track $index) { @if(item.isSender){
       <section
         (contextmenu)="onContextMenu($event, item)"
@@ -59,6 +60,11 @@
         </p>
       </section>
       } }
+      <span
+        class="absolute pi pi-arrow-down left-50 scroll-btn text-2xl cursor-pointer"
+        *ngIf="showScrollBtn()"
+        (click)="scrollToBottom()"
+      ></span>
     </section>
     <section
       class="fixed bottom-0"

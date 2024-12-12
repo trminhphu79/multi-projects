@@ -1,13 +1,11 @@
-export class SendMessageDto {
-  conversationId?: number;
+export class CreateMessageDto {
+  roomId: number;
   content: string;
   senderId: number;
-  receiverId: number;
 }
-
-export class NewMessageDto {
-  message: string;
-  roomId: string;
+export class CreateMessageDtoWithReceiver {
   senderId: number;
+  content: string;
+  roomId: string;
   receiverIds: number[];
 }

@@ -80,6 +80,7 @@ export class ConversationComponent {
   }
 
   protected onSelectConversation(input: { item: Conversation; index: number }) {
+    this.conversationStore.setReadMessage(input.item.id);
     const { id } = this.appState.user()?.profile as ProfileWithFriends;
     if (this.chatStore.conversationId()) {
       this.conversationStore.resotreMessageToConversation(
@@ -106,6 +107,9 @@ export class ConversationComponent {
     item: MessageCategory;
     index: number;
   }) {
-    console.log('onSelectMessageCategory: ', input);
+  }
+
+  protected onTurnOffHighlight(conversationId: number) {
+    this.conversationStore.setTurnOffHighlight(conversationId)
   }
 }

@@ -82,3 +82,8 @@ p-chip {
 .notification-overlaypanel .p-overlaypanel-content {
   padding: 0 !important;
 }
+
+.highlight-new-conversation-msg {
+  background-color: var(--blue-900) !important;
+  transition: background-color 0.5s ease !important;
+}

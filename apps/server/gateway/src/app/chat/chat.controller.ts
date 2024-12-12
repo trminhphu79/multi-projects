@@ -15,7 +15,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE_PATTERN_CHAT } from '@server/shared/message-pattern';
 import { catchError, EMPTY, tap } from 'rxjs';
 import {
-  NewMessageDto,
+  CreateMessageDto,
+  CreateMessageDtoWithReceiver,
   InteractionMessageDto,
 } from '@server/shared/dtos/message';
 import { JoinRoomDto, LeaveRoomDto } from '@server/shared/dtos/conversation';
@@ -101,7 +102,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage(SOCKET_CHAT_PATTERN.SEND_MESSAGE)
-  handleSendMessage(client: Socket, input: NewMessageDto) {
+  handleSendMessage(client: Socket, input: CreateMessageDtoWithReceiver) {
     const isSendGroup = input.receiverIds?.length > 1;
     if (isSendGroup) {
       this.handleSendGroupMessage(input);
@@ -142,10 +143,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       .subscribe();
   }
 
-  private handleSendPersonalMessage(client: Socket, input: NewMessageDto) {
+  private handleSendPersonalMessage(
+    client: Socket,
+    input: CreateMessageDtoWithReceiver
+  ) {
     const receiverId = input.receiverIds[0]; // because chat one by one only has a receiver
     Logger.log(
-      `Socket --- Message from ${client.id} to room ${input.roomId}: ${input.message} -- receiver: ${receiverId}`
+      `Socket --- Message from ${client.id} to room ${input.roomId}: ${input.content} -- receiver: ${receiverId}`
     );
     switch (this.checkReceiverStatus(receiverId, input.roomId)) {
       case UserConnectionStatus.ONLINE:
@@ -163,7 +167,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   //TODO: Need to send message for current receiver
-  private handleSendMessageOnline(payload: NewMessageDto) {
+  private handleSendMessageOnline(payload: CreateMessageDtoWithReceiver) {
     console.log('handleSendMessageOnline');
     this.natsClient
       .emit(MESSAGE_PATTERN_CHAT.SEND_MESSAGE, payload)
@@ -177,7 +181,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         tap(() => {
           this.server.to(payload.roomId).emit(SOCKET_CHAT_PATTERN.NEW_MESSAGE, {
             ...payload,
-            content: payload.message,
+            content: payload.content,
           });
         })
       )
@@ -185,26 +189,40 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   //TODO: Need to create message for conversation
-  private handleSendMessageUserOffline(payload: NewMessageDto) {
+  private handleSendMessageUserOffline(payload: CreateMessageDtoWithReceiver) {
     console.log('handleSendMessageUserOffline');
   }
 
   //TODO: Need to send message up lastmessage of conversation
-  private handleSendMessageUserOffRoom(payload: NewMessageDto) {
-    const roomId =
-      SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM +
-      '__' +
-      payload.receiverIds[0];
-    this.server.emit(roomId, {
-      content: payload.message,
-      conversationId: payload.roomId,
-      senderId: payload.senderId,
-      receiverId: payload.receiverIds[0],
-      timeSend: new Date().toISOString(),
-    });
+  private handleSendMessageUserOffRoom(payload: CreateMessageDtoWithReceiver) {
+    this.natsClient
+      .emit(MESSAGE_PATTERN_CHAT.SEND_MESSAGE, payload)
+      .pipe(
+        catchError((error) => {
+          this.server
+            .to(payload.roomId)
+            .emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE_FAIL, payload);
+          return EMPTY;
+        }),
+        tap(() => {
+          const roomId =
+            SOCKET_CONVERSATION_PATTERN.CONVERSATION_ROOM +
+            '__' +
+            payload.receiverIds[0];
+          this.server.emit(roomId, {
+            content: payload.content,
+            conversationId: payload.roomId,
+            senderId: payload.senderId,
+            receiverId: payload.receiverIds[0],
+            unread: true,
+            timeSend: new Date().toISOString(),
+          });
+        })
+      )
+      .subscribe();
   }
 
-  private handleSendGroupMessage(payload: NewMessageDto) {
+  private handleSendGroupMessage(payload: CreateMessageDtoWithReceiver) {
     console.log('handleSendGroupMessage: ', payload);
   }
 

@@ -90,13 +90,13 @@ export class SocketAdapterService implements ISocketAdapter {
    */
   sendMessage(
     roomId: number,
-    message: string,
+    content: string,
     senderId: number,
     receiverIds: number[]
   ): void {
     this.socket.emit(SOCKET_CHAT_PATTERN.SEND_MESSAGE, {
       roomId,
-      message,
+      content,
       senderId,
       receiverIds,
     });

@@ -81,12 +81,12 @@ export class SideBarComponent {
 
   signOut() {
     this.conversationStore.leaveAllRoom();
-    this.appState.signOut();
-    this.router.navigate(['/user']);
     this.conversationStore.resotreMessageToConversation(
       this.chatStore.conversationId(),
       this.chatStore.messages()
     );
+    this.appState.signOut();
+    this.router.navigate(['/user']);
   }
 
   onSelect(

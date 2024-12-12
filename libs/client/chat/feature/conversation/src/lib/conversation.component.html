@@ -9,6 +9,7 @@
     (searchChanges)="onSearchChanges($event)"
   ></cwm-input-search>
   <cwm-conversation-list
+    (turnOffHighlight)="onTurnOffHighlight($event)"
     [dataSource]="conversations()"
     (selectConversationChanges)="onSelectConversation($event)"
     class="w-full h-full"

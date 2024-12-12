@@ -104,6 +104,9 @@
       ],
       "@nest-monorepo/decorators": ["libs/server/decorators/src/index.ts"],
       "@nest-monorepo/guards": ["libs/server/guards/src/index.ts"],
+      "@client/directives/highlight": [
+        "libs/client/shared/directives/highlight/src/index.ts"
+      ],
       "@nest-monorepo/languages": ["libs/client/shared/languages/src/index.ts"],
       "@nest-monorepo/message-list": [
         "libs/client/chat/ui/message-list/src/index.ts"

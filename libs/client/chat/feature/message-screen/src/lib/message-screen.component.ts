@@ -4,9 +4,11 @@ import {
   ChangeDetectorRef,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
+  OnDestroy,
   OnInit,
   output,
   signal,
@@ -21,8 +23,10 @@ import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { toObservable } from '@angular/core/rxjs-interop';
 import {
   debounceTime,
+  delay,
   distinctUntilChanged,
   filter,
   fromEvent,
@@ -54,9 +58,7 @@ import { MenuItem } from 'primeng/api';
   templateUrl: './message-screen.component.html',
   styleUrl: './message-screen.component.scss',
 })
-export class MessageScreenComponent implements AfterViewInit {
-  sendMessage = output<string>();
-
+export class MessageScreenComponent implements AfterViewInit, OnDestroy {
   @ViewChild('wrapperMessageContent', { static: true })
   protected wrapperMessageContent!: ElementRef<HTMLElement>;
 
@@ -66,13 +68,35 @@ export class MessageScreenComponent implements AfterViewInit {
   @ViewChild('chatControlRef', { static: true })
   protected chatControlRef!: ElementRef<HTMLInputElement>;
 
+  @ViewChild('scrollTrigger', { static: true })
+  protected scrollTrigger!: ElementRef<HTMLElement>;
+
   private chatStore = inject(ChatStore);
 
   protected messages = this.chatStore.messages;
   protected sender = this.chatStore.conversation;
+  protected conversationChanges$ = toObservable(this.chatStore.conversationId);
 
   private originalMessageContentHeight = signal<number>(0);
   private originalMessageActionHeight = signal<number>(60);
+  protected showScrollBtn = signal(false);
+  private observer!: IntersectionObserver;
+
+  initIntersectionObserver() {
+    timer(2000).subscribe(() => {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          console.log('messageListRef: ...', entries);
+          const entry = entries[0];
+          this.showScrollBtn.set(entry.isIntersecting);
+        },
+        { root: this.messageListRef.nativeElement, threshold: 0.5 }
+      );
+
+      this.observer.observe(this.scrollTrigger.nativeElement);
+    });
+  }
+
   protected contextMenuItems: MenuItem[] = [
     {
       label: 'Copy',
@@ -97,7 +121,6 @@ export class MessageScreenComponent implements AfterViewInit {
   private cd = inject(ChangeDetectorRef);
 
   protected computedMessageContentHeight = computed(() => {
-    console.log('Re computedMessageContentHeight');
     const result =
       this.originalMessageContentHeight() - this.originalMessageActionHeight();
     return `${result}px`;
@@ -121,14 +144,14 @@ export class MessageScreenComponent implements AfterViewInit {
       this.wrapperMessageContent.nativeElement.offsetHeight
     );
     this.scrollToBottom();
+    this.initIntersectionObserver();
   }
 
   private registerValueChanges() {
-    this.chatControl.valueChanges
+    this.conversationChanges$
       .pipe(
-        tap((value) => {
-          console.log('chatControl: ', value);
-        })
+        delay(100),
+        tap(() => this.scrollToBottom())
       )
       .subscribe();
 
@@ -157,7 +180,7 @@ export class MessageScreenComponent implements AfterViewInit {
       .subscribe();
   }
 
-  private scrollToBottom(): void {
+  protected scrollToBottom(): void {
     if (this.messageListRef) {
       timer(100)
         .pipe(take(1))
@@ -176,5 +199,11 @@ export class MessageScreenComponent implements AfterViewInit {
 
   protected onSendMessage(message: string) {
     this.chatStore.sendMessage(message);
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 }

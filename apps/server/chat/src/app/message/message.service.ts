@@ -3,12 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SendMessageDto } from '@server/shared/dtos/message';
+import { CreateMessageDto } from '@server/shared/dtos/message';
 import { Message } from '@server/shared/entity/message';
 import { Conversation } from '@server/shared/entity/conversation';
 import { Profile } from '@server/shared/entity/profile';
 import { InjectModel } from '@nestjs/sequelize';
-
+import { from, Observable, throwError } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 @Injectable()
 export class MessageService {
   constructor(
@@ -20,68 +21,47 @@ export class MessageService {
     private profileModel: typeof Profile
   ) {}
 
-  async send(payload: SendMessageDto) {
-    const { senderId, receiverId, content } = payload;
+  send(payload: CreateMessageDto): Observable<any> {
+    const { roomId, senderId, content } = payload;
 
-    console.log('payload: ', payload);
+    return from(this.profileModel.findByPk(senderId)).pipe(
+      switchMap((sender) => {
+        if (!sender) {
+          return throwError(
+            () => new NotFoundException(`Sender with ID ${senderId} not found`)
+          );
+        }
 
-    // Validate sender and receiver profiles
-    const sender = await this.profileModel.findByPk(senderId);
-    if (!sender) {
-      throw new NotFoundException(
-        `Sender profile with id ${senderId} not found`
-      );
-    }
+        // If roomId is provided, validate it exists
+        return from(this.conversationModel.findByPk(roomId)).pipe(
+          switchMap((conversation) => {
+            if (!conversation) {
+              return throwError(
+                () =>
+                  new NotFoundException(
+                    `Conversation with ID ${roomId} not found`
+                  )
+              );
+            }
 
-    const receiver = await this.profileModel.findByPk(receiverId);
-    if (!receiver) {
-      throw new NotFoundException(
-        `Receiver profile with id ${receiverId} not found`
-      );
-    }
-
-    // Check if conversation already exists
-    const conversation = await this.conversationModel.findOne({
-      include: [
-        {
-          model: Profile,
-          as: 'members',
-          where: {
-            id: [senderId, receiverId],
-          },
-          through: {
-            attributes: [],
-          },
-          required: true,
-        },
-      ],
-      group: ['Conversation.id'], // Grouping by conversation
-    });
-
-    let existingConversation = null;
-
-    if (!conversation) {
-      // Create a new conversation if none exists
-      existingConversation = await this.conversationModel.create({
-        name: `Conversation between ${senderId} and ${receiverId}`,
-      });
-
-      // Associate both members with the conversation
-      await existingConversation.$set('members', [senderId, receiverId]);
-    } else {
-      existingConversation = conversation;
-    }
-
-    // Create the new message in the conversation
-    const newMessage = await this.messageModel.create({
-      senderId,
-      receiverId,
-      conversationId: existingConversation.id,
-      content,
-    });
-
-    console.log('newMessage: ', newMessage);
-    return newMessage;
+            // Create the new message
+            return from(
+              this.messageModel.create({
+                conversationId: roomId,
+                senderId,
+                content,
+              })
+            ).pipe(
+              map((newMessage) => ({
+                data: newMessage,
+                message: 'Send message successfully!',
+              }))
+            );
+          })
+        );
+      }),
+      catchError((error) => throwError(() => error))
+    );
   }
 
   async getConversationsByProfileId(

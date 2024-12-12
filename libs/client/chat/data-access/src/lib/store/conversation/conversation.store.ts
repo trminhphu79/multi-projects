@@ -67,6 +67,32 @@ export const ConversationStore = signalStore(
         patchState(store, { selectedConversation });
       },
 
+      setTurnOffHighlight(conversationId:number){
+        const conversations = getState(store).conversations;
+        conversations.forEach((c) => {
+          if (c.id == conversationId && c.lastMessage.onHighlight) {
+            c.lastMessage.onHighlight = false;
+            console.log('Read onHighlight: ', c.lastMessage);
+          }
+        });
+        patchState(store, {
+          conversations,
+        });
+      },
+
+      setReadMessage(conversationId: number) {
+        const conversations = getState(store).conversations;
+        conversations.forEach((c) => {
+          if (c.id == conversationId && c.lastMessage.unread) {
+            c.lastMessage.unread = false;
+            console.log('Read lasmessage: ', c.lastMessage);
+          }
+        });
+        patchState(store, {
+          conversations,
+        });
+      },
+
       getConversations() {
         conversationApi
           .getConversations({
@@ -123,8 +149,12 @@ export const ConversationStore = signalStore(
                     isSender: appState.user()?.profile?.id == response.senderId,
                     content: response.content,
                     timeSend: response.timeSend,
+                    onHighlight: true
                   };
+
+                  console.log('conv.lastMessage: ', conv.lastMessage);
                   const msg: Message = {
+                    id: -1,
                     content: response?.content,
                     senderId: response?.senderId,
                     receiverId: response?.receiverId,
@@ -132,6 +162,8 @@ export const ConversationStore = signalStore(
                     isSender: false,
                     timeSend: response?.timeSend,
                     isOld: false,
+                    unread: true,
+                  
                   };
 
                   if (!conv.messages?.length) {
@@ -143,8 +175,8 @@ export const ConversationStore = signalStore(
               });
               conversations.sort(
                 (a, b) =>
-                  new Date(a?.lastMessage?.timeSend).getTime() -
-                  new Date(b?.lastMessage?.timeSend).getTime()
+                  new Date(b?.lastMessage?.timeSend).getTime() -
+                  new Date(a?.lastMessage?.timeSend).getTime()
               );
               patchState(store, {
                 conversations: conversations,

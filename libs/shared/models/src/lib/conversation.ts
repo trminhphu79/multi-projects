@@ -12,15 +12,8 @@ export type Conversation = {
   id: number;
   messages: Message[];
   name: string;
-  lastMessage: {
-    id: number;
-    content: string;
-    timeSend: string;
-    fullName: string;
-    avatarUrl: string;
-    isSender: boolean;
-  };
-  receiver: Member|null;
+  lastMessage: { onHighlight: boolean } & Message;
+  receiver: Member | null;
   members?: Member[];
 };
 
